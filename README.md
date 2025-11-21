@@ -1,17 +1,17 @@
 # LifeUnity AI — Cognitive Twin System 🧠
 
 [![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io)
-[![HuggingFace](https://img.shields.io/badge/🤗%20HuggingFace-Spaces-yellow?style=for-the-badge)](https://huggingface.co/spaces)
+[![Render](https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://render.com)
 [![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
-[![TensorFlow](https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white)](https://tensorflow.org)
+[![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org)
 
-An advanced AI-powered cognitive twin system that tracks your emotional state, builds a personalized memory graph, and provides proactive well-being insights. **Optimized for HuggingFace Spaces deployment.**
+An advanced AI-powered cognitive twin system that tracks your emotional state, builds a personalized memory graph, and provides proactive well-being insights. **Optimized for Render.com deployment.**
 
 ## 🌟 Features
 
 ### 1. **Emotion Detection via Image Upload** 😊
-- Facial expression recognition using lightweight FER models
-- Image upload support for emotion analysis (HuggingFace Spaces compatible)
+- Facial expression recognition using AI models
+- Image upload support for emotion analysis
 - 7 emotion categories: happy, sad, angry, fear, surprise, disgust, neutral
 - Confidence scoring for each detected emotion
 - Automatic emotion history tracking
@@ -50,7 +50,7 @@ LifeUnity AI Cognitive Twin System
 │   └── AI Insights Page
 │
 ├── Core AI Modules
-│   ├── mood_detection.py      # FER-based emotion detection
+│   ├── mood_detection.py      # AI-based emotion detection
 │   ├── memory_graph.py         # Semantic memory with embeddings
 │   ├── insights_engine.py      # AI reasoning & recommendations
 │   └── user_profile.py         # User data management
@@ -66,30 +66,40 @@ LifeUnity AI Cognitive Twin System
     └── Emotion history
 ```
 
-## 🚀 Quick Start - HuggingFace Spaces
+## 🚀 Quick Start - Render.com Deployment
 
-### Deploy on HuggingFace Spaces (Recommended)
+### Deploy on Render.com (Recommended)
 
-This application is optimized for **HuggingFace Spaces** deployment:
+This application is optimized for **Render.com** deployment:
 
-1. **Fork or upload this repository to HuggingFace Spaces**
-2. **Select Streamlit SDK** in your Space settings
-3. **The app will automatically deploy** - no configuration needed!
-4. **Access your Space URL** and start using the app immediately
+1. **Fork or push this repository to GitHub**
+2. **Connect your GitHub repository to Render**
+   - Go to https://render.com
+   - Click "New +" → "Web Service"
+   - Connect your GitHub repository
+3. **Render will automatically detect render.yaml**
+   - Build Command: `pip install -r requirements.txt`
+   - Start Command: `streamlit run app/main.py --server.port $PORT --server.address 0.0.0.0`
+4. **Click "Create Web Service"**
+5. **Your app will be deployed** - first deployment takes 5-10 minutes
+6. **Access your Render URL** and start using the app immediately
 
 The application runs completely in the cloud with:
-- ✅ Image upload for emotion detection (no webcam needed)
+- ✅ Image upload for emotion detection
 - ✅ All AI models loaded automatically
 - ✅ JSON-based storage in `/data` directory
 - ✅ No API keys required
+- ✅ Full PyTorch and TensorFlow support
 
-### HuggingFace Spaces Configuration
+### Render.com Configuration
 
 The repository includes:
-- `HF_README.md` - Space metadata and configuration
-- `requirements.txt` - All cloud-compatible dependencies
+- `render.yaml` - Render service configuration
+- `requirements.txt` - All production dependencies
 - `.gitignore` - Proper exclusions for cloud deployment
 - `app/main.py` - Streamlit application entry point
+- `Dockerfile` - Optional Docker configuration
+- `run.sh` - Helper startup script
 
 ## 🖥️ Local Installation (Optional)
 
@@ -117,54 +127,45 @@ streamlit run app/main.py
 
 The application will open in your default web browser at `http://localhost:8501`
 
-## ☁️ Cloud Deployment
+## ☁️ Cloud Deployment Options
 
-### Deploy to Streamlit Cloud
+### Option 1: Deploy to Render.com (Recommended)
+
+**Why Render?**
+- ✅ Free tier available
+- ✅ Automatic deployments from GitHub
+- ✅ Full Python/PyTorch support
+- ✅ Persistent storage
+- ✅ Easy configuration with render.yaml
+
+**Steps:**
+1. **Push to GitHub** (if not already)
+2. **Go to [Render.com](https://render.com)**
+3. **Create a new Web Service**
+   - Connect your GitHub repository
+   - Render auto-detects configuration from render.yaml
+4. **Deploy** - that's it!
+5. **Your app is live** at: `https://[your-app-name].onrender.com`
+
+### Option 2: Deploy with Docker
+
+```bash
+# Build the Docker image
+docker build -t lifeunity-ai .
+
+# Run the container
+docker run -p 8501:8501 lifeunity-ai
+```
+
+### Option 3: Deploy to Streamlit Cloud
 
 1. **Fork/Push this repository to GitHub**
-
 2. **Visit [Streamlit Cloud](https://share.streamlit.io/)**
-
 3. **Create a new app**
    - Repository: `your-username/lifeunity-ai-cognitive-twin`
    - Branch: `main`
    - Main file path: `app/main.py`
-
 4. **Click "Deploy"**
-
-### Deploy to Render
-
-1. **Create a `render.yaml` file** (already included)
-
-2. **Connect your GitHub repository to Render**
-
-3. **Deploy as a Web Service**
-
-### Deploy to HuggingFace Spaces (Recommended)
-
-**This application is optimized for HuggingFace Spaces!**
-
-1. **Create a new Space on HuggingFace**
-   - Go to https://huggingface.co/spaces
-   - Click "Create new Space"
-
-2. **Configure your Space**
-   - Space name: `lifeunity-ai-cognitive-twin`
-   - SDK: **Streamlit**
-   - Space hardware: CPU basic (free)
-
-3. **Upload or git push your code**
-   - Use the HuggingFace UI to upload files
-   - Or clone the Space repo and push code via git
-
-4. **The app will automatically deploy**
-   - First deployment may take 5-10 minutes
-   - Models download automatically on first run
-
-5. **Access your Space**
-   - Your app will be live at: `https://huggingface.co/spaces/[username]/[space-name]`
-
-**Note**: The app is configured to work without webcam support (HF limitation) - only image upload is available.
 
 ## 📖 Usage Guide
 
@@ -253,6 +254,8 @@ By default, all data is stored locally in JSON files:
 - **FER (Facial Expression Recognition)** - Emotion detection
 - **Sentence-BERT** (all-MiniLM-L6-v2) - Text embeddings
 - **NetworkX** - Graph analysis
+- **PyTorch** - Deep learning framework
+- **TensorFlow** - Model backend
 
 ### Frontend
 - **Streamlit** - Web application framework
@@ -263,7 +266,7 @@ By default, all data is stored locally in JSON files:
 - **Python 3.8+** - Core language
 - **NumPy** - Numerical computing
 - **OpenCV** - Image processing
-- **TensorFlow** - Deep learning backend
+- **Transformers** - NLP models
 
 ## 📊 Data Privacy
 
@@ -292,6 +295,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - **Sentence-Transformers** - For semantic embeddings
 - **Streamlit** - For the amazing web framework
 - **NetworkX** - For graph analysis tools
+- **Render.com** - For seamless cloud deployment
 
 ## 📧 Contact
 
@@ -317,7 +321,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ### Mood Detection
 ![Mood Detection Screenshot](docs/screenshots/mood_detection.png)
-*Real-time emotion detection from webcam or uploaded images*
+*Real-time emotion detection from uploaded images*
 
 ### Cognitive Memory
 ![Cognitive Memory Screenshot](docs/screenshots/memory_graph.png)
@@ -330,3 +334,5 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ---
 
 **Built with ❤️ for better mental wellness and productivity**
+
+**Deployed on Render.com for reliable, scalable cloud hosting**

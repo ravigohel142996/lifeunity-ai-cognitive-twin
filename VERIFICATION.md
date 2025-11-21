@@ -125,7 +125,6 @@ The project has been organized with:
 - ✅ JSON-based storage (cloud-compatible)
 - ✅ Streamlit Cloud compatible
 - ✅ Render compatible
-- ✅ HuggingFace Spaces compatible
 
 ## ✅ STEP 5 — README.md
 

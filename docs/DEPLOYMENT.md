@@ -3,16 +3,69 @@
 This guide provides detailed instructions for deploying LifeUnity AI — Cognitive Twin System to various cloud platforms.
 
 ## Table of Contents
+- [Render Deployment (Recommended)](#render-deployment)
 - [Streamlit Cloud Deployment](#streamlit-cloud-deployment)
-- [Render Deployment](#render-deployment)
-- [HuggingFace Spaces Deployment](#huggingface-spaces-deployment)
 - [Docker Deployment](#docker-deployment)
+
+---
+
+## Render Deployment
+
+**Recommended for production deployment** - Render provides free web service hosting with automatic deployments and full Python/PyTorch support.
+
+### Prerequisites
+- GitHub account
+- Render account (free at https://render.com)
+
+### Steps
+
+1. **Push this repository to GitHub**
+
+2. **Go to [Render Dashboard](https://dashboard.render.com)**
+
+3. **Click "New +" and select "Web Service"**
+
+4. **Connect your GitHub repository**
+
+5. **Render automatically detects render.yaml configuration:**
+   - Name: `lifeunity-ai-cognitive-twin`
+   - Environment: `Python 3`
+   - Region: `Singapore`
+   - Build Command: `pip install -r requirements.txt`
+   - Start Command: `streamlit run app/main.py --server.port=$PORT --server.address=0.0.0.0`
+
+6. **Select the free plan**
+
+7. **Click "Create Web Service"**
+
+8. **Wait for deployment** (first deployment may take 10-15 minutes)
+
+9. **Access your app** at the provided Render URL (e.g., `https://[your-app-name].onrender.com`)
+
+### Manual Configuration (if render.yaml not detected)
+
+If Render doesn't auto-detect the configuration:
+
+1. Go to Render Dashboard
+2. Click "New +" → "Web Service"
+3. Connect your repository
+4. Manually configure:
+   - Environment: `Python 3`
+   - Build Command: `pip install -r requirements.txt`
+   - Start Command: `streamlit run app/main.py --server.port=$PORT --server.address=0.0.0.0`
+5. Deploy
+
+### Troubleshooting
+- If deployment fails, check the logs in Render Dashboard
+- Ensure all dependencies in requirements.txt are compatible
+- Large models (like transformers) may take time to download on first run
+- For memory issues, consider upgrading to a paid plan
 
 ---
 
 ## Streamlit Cloud Deployment
 
-Streamlit Cloud is the easiest way to deploy this application.
+Streamlit Cloud is another easy option for deploying this application.
 
 ### Prerequisites
 - GitHub account
@@ -45,105 +98,6 @@ Streamlit Cloud is the easiest way to deploy this application.
 - If deployment fails, check the logs in Streamlit Cloud
 - Ensure all dependencies in requirements.txt are compatible
 - Large models (like transformers) may take time to download on first run
-
----
-
-## Render Deployment
-
-Render provides free web service hosting with automatic deployments.
-
-### Prerequisites
-- GitHub account
-- Render account (free at https://render.com)
-
-### Steps
-
-1. **Push this repository to GitHub**
-
-2. **Go to [Render Dashboard](https://dashboard.render.com)**
-
-3. **Click "New +" and select "Web Service"**
-
-4. **Connect your GitHub repository**
-
-5. **Configure the service:**
-   - Name: `lifeunity-ai-cognitive-twin`
-   - Environment: `Python 3`
-   - Build Command: `pip install -r requirements.txt`
-   - Start Command: `streamlit run app/main.py --server.port=$PORT --server.address=0.0.0.0`
-
-6. **Select the free plan**
-
-7. **Advanced settings:**
-   - Auto-Deploy: Yes (recommended)
-   - Environment variables: None required
-
-8. **Click "Create Web Service"**
-
-9. **Wait for deployment** (first deployment may take 10-15 minutes)
-
-10. **Access your app** at the provided Render URL
-
-### Using render.yaml (Alternative)
-
-The repository includes a `render.yaml` file. You can:
-
-1. Go to Render Dashboard
-2. Click "New +" → "Blueprint"
-3. Connect your repository
-4. Render will automatically use `render.yaml` configuration
-
----
-
-## HuggingFace Spaces Deployment
-
-HuggingFace Spaces provides free hosting with GPU support options.
-
-### Prerequisites
-- HuggingFace account (free at https://huggingface.co)
-
-### Steps
-
-1. **Go to [HuggingFace Spaces](https://huggingface.co/spaces)**
-
-2. **Click "Create new Space"**
-
-3. **Configure the Space:**
-   - Owner: Your username
-   - Space name: `lifeunity-ai-cognitive-twin`
-   - License: MIT
-   - Select SDK: **Streamlit**
-   - Space hardware: CPU basic (free) or GPU (paid)
-   - Visibility: Public or Private
-
-4. **Click "Create Space"**
-
-5. **Clone the Space repository:**
-   ```bash
-   git clone https://huggingface.co/spaces/[your-username]/lifeunity-ai-cognitive-twin
-   ```
-
-6. **Copy files to the Space:**
-   ```bash
-   cp -r app requirements.txt HF_README.md [space-directory]/
-   ```
-
-7. **Rename HF_README.md to README.md:**
-   ```bash
-   cd [space-directory]
-   mv HF_README.md README.md
-   ```
-
-8. **Push to HuggingFace:**
-   ```bash
-   git add .
-   git commit -m "Initial deployment"
-   git push
-   ```
-
-9. **Wait for deployment** (automatic)
-
-10. **Access your Space** at `https://huggingface.co/spaces/[your-username]/lifeunity-ai-cognitive-twin`
 
 ---
 
@@ -230,20 +184,15 @@ services:
 
 ### Monitoring
 
-- **Streamlit Cloud:** Use built-in logs and metrics
 - **Render:** Check logs in the Render dashboard
-- **HuggingFace:** Use the Spaces logs tab
+- **Streamlit Cloud:** Use built-in logs and metrics
 - **Docker:** Use `docker logs [container-id]`
 
 ### Updating Your Deployment
 
-**Streamlit Cloud & Render:**
+**Render & Streamlit Cloud:**
 - Push changes to your GitHub repository
 - Deployment updates automatically
-
-**HuggingFace Spaces:**
-- Push changes to the Space repository
-- Rebuild happens automatically
 
 **Docker:**
 - Rebuild image: `docker build -t lifeunity-ai .`
@@ -266,9 +215,9 @@ services:
 
 **Port Issues:**
 - Ensure using correct port for platform
-- Streamlit Cloud: Auto-configured
 - Render: Use `$PORT` environment variable
-- HuggingFace: Port 7860 (default for Streamlit)
+- Streamlit Cloud: Auto-configured
+- Docker: Port 8501
 
 **Dependency Conflicts:**
 - Check Python version (3.9+ recommended)

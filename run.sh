@@ -1,5 +1,5 @@
 #!/bin/bash
-# Startup script for LifeUnity AI Cognitive Twin System
+# Startup script for LifeUnity AI Cognitive Twin System - Render.com
 
 echo "🧠 Starting LifeUnity AI - Cognitive Twin System..."
 echo "=================================================="
@@ -9,19 +9,14 @@ echo ""
 python_version=$(python3 --version 2>&1)
 echo "✓ Python version: $python_version"
 
-# Check if requirements are installed
-echo ""
-echo "📦 Checking dependencies..."
-
 # Create necessary directories
 mkdir -p data logs
-
 echo "✓ Created data and logs directories"
 
-# Start Streamlit
+# Start Streamlit with Render-specific configuration
 echo ""
-echo "🚀 Launching Streamlit application..."
+echo "🚀 Launching Streamlit application on Render..."
 echo "=================================================="
 echo ""
 
-streamlit run app/main.py
+streamlit run app/main.py --server.port $PORT --server.address 0.0.0.0
