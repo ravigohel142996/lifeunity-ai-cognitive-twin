@@ -37,8 +37,10 @@ env/
 Thumbs.db
 
 # Data and Logs
-data/
-logs/
+data/*
+!data/.gitkeep
+logs/*
+!logs/.gitkeep
 *.log
 
 # Streamlit
