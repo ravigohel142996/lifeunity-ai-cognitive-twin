@@ -102,7 +102,6 @@ This is a fully functional, production-ready AI-powered cognitive twin system th
   - Detailed deployment for all platforms
   - Streamlit Cloud guide
   - Render deployment
-  - HuggingFace Spaces
   - Docker instructions
   - Troubleshooting
 
@@ -238,18 +237,12 @@ This is a fully functional, production-ready AI-powered cognitive twin system th
 - **URL:** Custom subdomain
 
 ### 2. Render 🎨
-- **Status:** Ready
+- **Status:** Ready (Primary Deployment)
 - **Effort:** 5 minutes
 - **Cost:** Free tier available
 - **URL:** Custom domain
 
-### 3. HuggingFace Spaces 🤗
-- **Status:** Ready
-- **Effort:** 10 minutes
-- **Cost:** Free (CPU)
-- **URL:** HF subdomain
-
-### 4. Docker 🐳
+### 3. Docker 🐳
 - **Status:** Ready
 - **Effort:** 2 minutes
 - **Cost:** Self-hosted

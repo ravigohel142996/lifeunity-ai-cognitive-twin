@@ -233,7 +233,7 @@ def render_mood_detection():
     
     st.markdown("---")
     
-    # Image upload only (HuggingFace Spaces compatible)
+    # Image upload for emotion detection
     uploaded_file = st.file_uploader(
         "Upload an image of your face",
         type=['jpg', 'jpeg', 'png'],
