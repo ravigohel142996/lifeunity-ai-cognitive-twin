@@ -1,16 +1,12 @@
 """
 Mood Detection module for LifeUnity AI Cognitive Twin System.
-Real-time emotion detection using facial expression recognition.
+Emotion detection using facial expression recognition via image upload.
 """
 
-import cv2
 import numpy as np
-from PIL import Image
-from typing import Dict, Optional, Tuple
-import streamlit as st
+from typing import Dict
 from fer import FER
 from app.utils.logger import get_logger
-from app.utils.preprocess import preprocess_image_for_emotion, preprocess_face_region
 
 logger = get_logger("MoodDetection")
 
