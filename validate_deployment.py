@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-HuggingFace Spaces Pre-Deployment Validation Script
-Validates the LifeUnity AI Cognitive Twin System before deployment
+Render.com Pre-Deployment Validation Script
+Validates the LifeUnity AI Cognitive Twin System before deployment to Render
 """
 
 import os
@@ -9,7 +9,7 @@ import sys
 from pathlib import Path
 
 print("="*60)
-print("HuggingFace Spaces Pre-Deployment Validation")
+print("Render.com Pre-Deployment Validation")
 print("LifeUnity AI — Cognitive Twin System")
 print("="*60)
 print()
@@ -35,7 +35,8 @@ required_files = [
     "app/utils/embedder.py",
     "app/utils/logger.py",
     "requirements.txt",
-    "HF_README.md"
+    "render.yaml",
+    "README.md"
 ]
 
 all_dirs_ok = True
@@ -140,34 +141,35 @@ else:
 
 print()
 
-# STEP 4: Configure HuggingFace Space
-print("✅ STEP 4: CONFIGURE HUGGINGFACE SPACE")
+# STEP 4: Validate Render Configuration
+print("✅ STEP 4: VALIDATE RENDER CONFIGURATION")
 print("-" * 60)
 
-if Path("HF_README.md").exists():
-    with open("HF_README.md", "r") as f:
-        hf_content = f.read()
+if Path("render.yaml").exists():
+    with open("render.yaml", "r") as f:
+        render_content = f.read()
     
-    if "sdk: streamlit" in hf_content:
-        print("  ✓ SDK set to Streamlit")
+    if "streamlit run app/main.py" in render_content:
+        print("  ✓ Start command configured correctly")
     else:
-        print("  ✗ SDK not set to Streamlit")
+        print("  ✗ Start command not set correctly")
         sys.exit(1)
     
-    if "app_file: app/main.py" in hf_content:
-        print("  ✓ app_file points to app/main.py")
+    if "$PORT" in render_content or "${PORT}" in render_content:
+        print("  ✓ PORT variable configured")
     else:
-        print("  ⚠ app_file not explicitly set (will default to app.py)")
+        print("  ✗ PORT variable not configured")
+        sys.exit(1)
     
-    if "gradio" not in hf_content.lower():
-        print("  ✓ No Gradio configuration found")
+    if "pip install -r requirements.txt" in render_content:
+        print("  ✓ Build command configured")
     else:
-        print("  ⚠ Gradio references found in config")
+        print("  ⚠ Build command not explicitly set")
     
     print()
-    print("✅ HuggingFace Space configuration PASSED")
+    print("✅ Render configuration PASSED")
 else:
-    print("  ✗ HF_README.md NOT FOUND")
+    print("  ✗ render.yaml NOT FOUND")
     sys.exit(1)
 
 print()
@@ -212,10 +214,10 @@ if webcam_issues:
     print()
     for issue in webcam_issues:
         print(f"  ✗ {issue}")
-    print("❌ Webcam code found (not compatible with HF Spaces)")
+    print("❌ Webcam code found (not compatible with cloud deployment)")
     sys.exit(1)
 else:
-    print("  ✓ No webcam code found (HF Spaces compatible)")
+    print("  ✓ No webcam code found (cloud-compatible)")
 
 print()
 
@@ -258,13 +260,13 @@ print("✅ DEPLOYMENT READINESS REPORT")
 print("="*60)
 print()
 print("Project: LifeUnity AI — Cognitive Twin System")
-print("Status: ✅ READY FOR HUGGINGFACE SPACES DEPLOYMENT")
+print("Status: ✅ READY FOR RENDER.COM DEPLOYMENT")
 print()
 print("Configuration:")
-print("  • SDK: Streamlit")
+print("  • Platform: Render.com")
 print("  • Entry Point: app/main.py")
-print("  • Hardware: CPU Basic (free tier)")
-print("  • Visibility: Public")
+print("  • Region: Singapore")
+print("  • Plan: Free tier")
 print()
 print("Pages Available:")
 print("  1. ✅ Dashboard - Metrics & trends")
@@ -273,7 +275,7 @@ print("  3. ✅ Cognitive Memory - Notes with embeddings")
 print("  4. ✅ AI Insights - Wellness reports")
 print()
 print("Features:")
-print("  • ✅ No webcam code (HF Spaces compatible)")
+print("  • ✅ No webcam code (cloud-compatible)")
 print("  • ✅ Image upload for emotion detection")
 print("  • ✅ Sentence-BERT embeddings (all-MiniLM-L6-v2)")
 print("  • ✅ Local rule-based AI insights (no API keys)")
@@ -281,11 +283,11 @@ print("  • ✅ JSON storage in /data directory")
 print("  • ✅ All dependencies cloud-safe")
 print()
 print("Next Steps:")
-print("  1. Create Space on HuggingFace")
-print("  2. Select Streamlit SDK")
-print("  3. Upload project files")
-print("  4. Rename HF_README.md to README.md")
-print("  5. Space will auto-deploy in 5-10 minutes")
+print("  1. Push repository to GitHub")
+print("  2. Go to Render.com dashboard")
+print("  3. Connect GitHub repository")
+print("  4. Click 'Create Web Service'")
+print("  5. Render will auto-detect render.yaml and deploy")
 print()
 print("="*60)
 print("✅ ALL VALIDATION CHECKS PASSED")

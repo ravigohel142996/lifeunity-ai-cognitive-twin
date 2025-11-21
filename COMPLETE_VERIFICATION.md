@@ -4,7 +4,7 @@
 
 **Date**: 2025-11-21  
 **Version**: 1.0.0  
-**Status**: Ready for HuggingFace Spaces Deployment
+**Status**: Ready for Render.com Deployment
 
 ---
 
@@ -103,7 +103,7 @@
 **All dependencies:**
 - Security-patched versions
 - Cloud-compatible
-- HuggingFace Spaces tested
+- Render-compatible
 
 ---
 
@@ -124,7 +124,7 @@
 - ✅ JSON-based (cloud-compatible)
 - ✅ /data directory structure
 - ✅ No local database
-- ✅ Works in HF Spaces environment
+- ✅ Works in cloud environments
 
 ### Code Quality
 - ✅ No placeholder code
@@ -151,25 +151,31 @@
 
 ---
 
-## 🚀 HuggingFace Spaces Deployment
+## 🚀 Render.com Deployment
 
 ### Required Files
 ✅ **app/** - Complete application directory
 ✅ **requirements.txt** - All dependencies
-✅ **HF_README.md** - Space configuration (use as README.md)
+✅ **render.yaml** - Render configuration
+✅ **README.md** - Project documentation
 
 ### Deployment Steps
-1. Create new Space on HuggingFace
-2. Select Streamlit SDK
-3. Choose CPU basic (free tier)
-4. Upload files: app/, requirements.txt, HF_README.md (rename to README.md)
-5. Auto-deploys in 5-10 minutes
+1. Push repository to GitHub
+2. Connect GitHub repository to Render
+3. Render auto-detects render.yaml configuration
+4. Click "Create Web Service"
+5. Auto-deploys in 10-15 minutes
 
-### Space Configuration
+### Render Configuration
 ```yaml
-sdk: streamlit
-sdk_version: 1.28.0
-app_file: app/main.py
+services:
+  - type: web
+    name: lifeunity-ai-cognitive-twin
+    env: python
+    region: singapore
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: streamlit run app/main.py --server.port $PORT --server.address 0.0.0.0
 ```
 
 ---
@@ -294,7 +300,7 @@ app_file: app/main.py
 **All Requirements Met:**
 - ✅ All files filled with production code
 - ✅ No placeholder or dummy code
-- ✅ Cloud-safe (HF Spaces CPU)
+- ✅ Cloud-safe (Render-compatible)
 - ✅ No webcam dependencies
 - ✅ Image upload only
 - ✅ All relative imports
@@ -316,16 +322,16 @@ app_file: app/main.py
 
 **Key Files:**
 - app/main.py - Streamlit entry point
-- HF_README.md - Space configuration
+- render.yaml - Render configuration
 - requirements.txt - Dependencies
 
 ---
 
-**PROJECT STATUS: ✅ 100% COMPLETE & READY FOR PRODUCTION**
+**PROJECT STATUS: ✅ 100% COMPLETE & READY FOR RENDER DEPLOYMENT**
 
 All files contain complete, optimized, production-quality code.  
 No placeholders. No dummy functions. No local dependencies.  
-Ready for immediate deployment on HuggingFace Spaces.
+Ready for immediate deployment on Render.com.
 
 Generated: 2025-11-21  
 Version: 1.0.0  
