@@ -225,103 +225,59 @@ def render_dashboard():
 def render_mood_detection():
     """Render the Mood Detection page."""
     st.markdown('<div class="main-header">😊 Mood Detection</div>', unsafe_allow_html=True)
-    st.markdown("### Real-time Emotion Detection")
+    st.markdown("### Emotion Detection via Image Upload")
+    st.info("ℹ️ Upload a clear photo of your face for emotion analysis")
     
     detector = st.session_state.mood_detector
     profile = st.session_state.user_profile
     
-    # Detection method selection
-    detection_mode = st.radio(
-        "Choose detection method:",
-        ["Upload Image", "Webcam Capture"],
-        horizontal=True
-    )
-    
     st.markdown("---")
     
-    if detection_mode == "Upload Image":
-        uploaded_file = st.file_uploader(
-            "Upload an image of your face",
-            type=['jpg', 'jpeg', 'png'],
-            help="Upload a clear photo showing your face"
-        )
-        
-        if uploaded_file is not None:
-            # Load and display image
-            image = Image.open(uploaded_file)
-            image_np = np.array(image)
-            
-            col1, col2 = st.columns(2)
-            
-            with col1:
-                st.image(image, caption="Uploaded Image", use_column_width=True)
-            
-            with col2:
-                with st.spinner("Detecting emotion..."):
-                    result = detector.detect_emotion(image_np, return_all=True)
-                
-                if result['face_detected']:
-                    emotion = result['emotion']
-                    confidence = result['confidence']
-                    
-                    # Display result
-                    st.markdown(f"### Detected Emotion: {emotion.title()} {detector.get_emotion_emoji(emotion)}")
-                    st.markdown(f"**Confidence:** {confidence*100:.1f}%")
-                    
-                    # Progress bar for confidence
-                    st.progress(confidence)
-                    
-                    # Save to profile
-                    if st.button("💾 Save to Profile"):
-                        profile.add_emotion_record(emotion, confidence)
-                        st.success("✅ Emotion saved to your profile!")
-                    
-                    # Show all emotions
-                    if result.get('all_emotions'):
-                        st.markdown("### All Detected Emotions")
-                        emotions_data = result['all_emotions']
-                        for emo, score in sorted(emotions_data.items(), key=lambda x: x[1], reverse=True):
-                            st.write(f"{emo.title()}: {score*100:.1f}%")
-                else:
-                    st.error("❌ No face detected in the image. Please upload a clearer photo with a visible face.")
+    # Image upload only (HuggingFace Spaces compatible)
+    uploaded_file = st.file_uploader(
+        "Upload an image of your face",
+        type=['jpg', 'jpeg', 'png'],
+        help="Upload a clear photo showing your face for emotion detection"
+    )
     
-    else:  # Webcam Capture
-        st.info("📷 Webcam capture requires camera permissions in your browser.")
+    if uploaded_file is not None:
+        # Load and display image
+        image = Image.open(uploaded_file)
+        image_np = np.array(image)
         
-        # Camera input (Streamlit has built-in camera support)
-        camera_image = st.camera_input("Take a photo")
+        col1, col2 = st.columns(2)
         
-        if camera_image is not None:
-            image = Image.open(camera_image)
-            image_np = np.array(image)
+        with col1:
+            st.image(image, caption="Uploaded Image", use_column_width=True)
+        
+        with col2:
+            with st.spinner("Analyzing emotion..."):
+                result = detector.detect_emotion(image_np, return_all=True)
             
-            col1, col2 = st.columns(2)
-            
-            with col1:
-                st.image(image, caption="Captured Image", use_column_width=True)
-            
-            with col2:
-                with st.spinner("Detecting emotion..."):
-                    result = detector.detect_emotion(image_np, return_all=True)
+            if result['face_detected']:
+                emotion = result['emotion']
+                confidence = result['confidence']
                 
-                if result['face_detected']:
-                    emotion = result['emotion']
-                    confidence = result['confidence']
-                    
-                    st.markdown(f"### Detected Emotion: {emotion.title()} {detector.get_emotion_emoji(emotion)}")
-                    st.markdown(f"**Confidence:** {confidence*100:.1f}%")
-                    st.progress(confidence)
-                    
-                    if st.button("💾 Save to Profile"):
-                        profile.add_emotion_record(emotion, confidence)
-                        st.success("✅ Emotion saved to your profile!")
-                    
-                    if result.get('all_emotions'):
-                        st.markdown("### All Detected Emotions")
-                        for emo, score in sorted(result['all_emotions'].items(), key=lambda x: x[1], reverse=True):
-                            st.write(f"{emo.title()}: {score*100:.1f}%")
-                else:
-                    st.error("❌ No face detected. Please retake the photo.")
+                # Display result
+                st.markdown(f"### Detected Emotion: {emotion.title()} {detector.get_emotion_emoji(emotion)}")
+                st.markdown(f"**Confidence:** {confidence*100:.1f}%")
+                
+                # Progress bar for confidence
+                st.progress(confidence)
+                
+                # Save to profile
+                if st.button("💾 Save to Profile", key="save_emotion"):
+                    profile.add_emotion_record(emotion, confidence)
+                    st.success("✅ Emotion saved to your profile!")
+                
+                # Show all emotions
+                if result.get('all_emotions'):
+                    st.markdown("### All Detected Emotions")
+                    emotions_data = result['all_emotions']
+                    for emo, score in sorted(emotions_data.items(), key=lambda x: x[1], reverse=True):
+                        st.write(f"{emo.title()}: {score*100:.1f}%")
+            else:
+                st.error("❌ No face detected in the image. Please upload a clearer photo with a visible face.")
     
     # Recent emotion history
     st.markdown("---")
