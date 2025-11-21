@@ -86,9 +86,10 @@ The application runs completely in the cloud with:
 ### HuggingFace Spaces Configuration
 
 The repository includes:
-- `app.py` - Entry point for HuggingFace Spaces
+- `HF_README.md` - Space metadata and configuration
 - `requirements.txt` - All cloud-compatible dependencies
 - `.gitignore` - Proper exclusions for cloud deployment
+- `app/main.py` - Streamlit application entry point
 
 ## 🖥️ Local Installation (Optional)
 

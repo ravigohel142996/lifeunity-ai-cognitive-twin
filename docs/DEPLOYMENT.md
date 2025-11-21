@@ -125,28 +125,17 @@ HuggingFace Spaces provides free hosting with GPU support options.
 
 6. **Copy files to the Space:**
    ```bash
-   cp -r app requirements.txt README.md render.yaml [space-directory]/
+   cp -r app requirements.txt HF_README.md [space-directory]/
    ```
 
-7. **Create a simple `app.py` at the root:**
-   ```python
-   # app.py - Entry point for HuggingFace Spaces
-   import os
-   import sys
-   
-   # Add app directory to path
-   sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'app'))
-   
-   # Import and run main
-   from app.main import main
-   
-   if __name__ == "__main__":
-       main()
+7. **Rename HF_README.md to README.md:**
+   ```bash
+   cd [space-directory]
+   mv HF_README.md README.md
    ```
 
 8. **Push to HuggingFace:**
    ```bash
-   cd [space-directory]
    git add .
    git commit -m "Initial deployment"
    git push
