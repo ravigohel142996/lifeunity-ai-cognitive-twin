@@ -98,41 +98,6 @@ class MoodDetector:
                 'error': str(e)
             }
     
-    def detect_emotion_from_webcam(self) -> Optional[Dict[str, any]]:
-        """
-        Capture and detect emotion from webcam.
-        
-        Returns:
-            Emotion detection result or None if capture failed
-        """
-        try:
-            cap = cv2.VideoCapture(0)
-            
-            if not cap.isOpened():
-                logger.error("Could not open webcam")
-                return None
-            
-            # Capture frame
-            ret, frame = cap.read()
-            cap.release()
-            
-            if not ret:
-                logger.error("Failed to capture frame from webcam")
-                return None
-            
-            # Convert BGR to RGB
-            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            
-            # Detect emotion
-            result = self.detect_emotion(frame_rgb, return_all=True)
-            result['image'] = frame_rgb
-            
-            return result
-            
-        except Exception as e:
-            logger.error(f"Error capturing from webcam: {str(e)}", exc_info=True)
-            return None
-    
     def get_emotion_color(self, emotion: str) -> str:
         """
         Get color associated with emotion.
