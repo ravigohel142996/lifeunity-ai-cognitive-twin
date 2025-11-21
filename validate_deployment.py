@@ -106,9 +106,13 @@ required_packages = [
     "opencv-python-headless",
     "numpy",
     "pandas",
-    "Pillow",
+    "pillow",  # Case-insensitive match
     "scikit-learn",
-    "networkx"
+    "networkx",
+    "fer",
+    "tensorflow",
+    "plotly",
+    "matplotlib"
 ]
 
 if Path("requirements.txt").exists():
@@ -194,13 +198,15 @@ if syntax_errors:
 # Check for webcam/camera code
 print("  Checking for webcam/camera code...")
 webcam_issues = []
-for file_path in ["app/main.py", "app/mood_detection.py"]:
-    with open(file_path, "r") as f:
-        content = f.read()
-        if "camera_input" in content:
-            webcam_issues.append(f"{file_path} contains camera_input")
-        if "VideoCapture" in content:
-            webcam_issues.append(f"{file_path} contains VideoCapture")
+webcam_check_files = [f for f in required_files if f.endswith("main.py") or f.endswith("mood_detection.py")]
+for file_path in webcam_check_files:
+    if Path(file_path).exists():
+        with open(file_path, "r") as f:
+            content = f.read()
+            if "camera_input" in content:
+                webcam_issues.append(f"{file_path} contains camera_input")
+            if "VideoCapture" in content:
+                webcam_issues.append(f"{file_path} contains VideoCapture")
 
 if webcam_issues:
     print()
