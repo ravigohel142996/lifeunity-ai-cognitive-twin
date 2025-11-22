@@ -10,7 +10,7 @@ from datetime import datetime
 from pathlib import Path
 import networkx as nx
 from app.utils.embedder import get_embedder
-from app.utils.logger import get_logger
+from utils.logger import get_logger
 from app.utils.preprocess import clean_text
 
 logger = get_logger("MemoryGraph")
