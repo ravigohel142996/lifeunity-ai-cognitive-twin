@@ -20,6 +20,7 @@ from mood_detection import get_mood_detector
 from memory_graph import get_memory_graph
 from user_profile import get_user_profile
 from insights_engine import get_insights_engine
+from utils.logger import get_logger
 
 # Initialize logger
 logger = get_logger("MainApp")
