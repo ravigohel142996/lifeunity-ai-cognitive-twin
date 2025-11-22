@@ -7,6 +7,8 @@ import numpy as np
 from typing import Dict
 from fer import FER
 from app.utils.logger import get_logger
+from fer import Video, Detector
+detector = Detector()
 
 logger = get_logger("MoodDetection")
 
