@@ -20,4 +20,4 @@ plotly>=5.14.0
 # Emotion Detection
 fer==21.0.5
 tensorflow>=2.13.0
-setuptools<81
+setuptools>=70,<81
