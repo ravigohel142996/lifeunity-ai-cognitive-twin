@@ -25,7 +25,7 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 
 # 4. Run the application
-streamlit run app/main.py
+streamlit run main.py
 ```
 
 The app will open in your browser at `http://localhost:8501`
@@ -87,7 +87,7 @@ chmod +x run.sh
 1. Fork this repository
 2. Visit [share.streamlit.io](https://share.streamlit.io)
 3. Create new app: `your-username/lifeunity-ai-cognitive-twin`
-4. Set main file: `app/main.py`
+4. Set main file: `main.py`
 5. Deploy! ✨
 
 ### Render
@@ -119,7 +119,7 @@ pip install -r requirements.txt
 ### Port already in use
 ```bash
 # Use a different port
-streamlit run app/main.py --server.port 8502
+streamlit run main.py --server.port 8502
 ```
 
 ## Configuration

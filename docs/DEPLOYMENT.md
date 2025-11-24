@@ -32,7 +32,7 @@ This guide provides detailed instructions for deploying LifeUnity AI — Cogniti
    - Environment: `Python 3`
    - Region: `Singapore`
    - Build Command: `pip install -r requirements.txt`
-   - Start Command: `streamlit run app/main.py --server.port=$PORT --server.address=0.0.0.0`
+   - Start Command: `streamlit run main.py --server.port=$PORT --server.address=0.0.0.0`
 
 6. **Select the free plan**
 
@@ -52,7 +52,7 @@ If Render doesn't auto-detect the configuration:
 4. Manually configure:
    - Environment: `Python 3`
    - Build Command: `pip install -r requirements.txt`
-   - Start Command: `streamlit run app/main.py --server.port=$PORT --server.address=0.0.0.0`
+   - Start Command: `streamlit run main.py --server.port=$PORT --server.address=0.0.0.0`
 5. Deploy
 
 ### Troubleshooting
@@ -82,7 +82,7 @@ Streamlit Cloud is another easy option for deploying this application.
 4. **Configure the app:**
    - Repository: `your-username/lifeunity-ai-cognitive-twin`
    - Branch: `main`
-   - Main file path: `app/main.py`
+   - Main file path: `main.py`
 
 5. **Advanced settings (optional):**
    - Python version: 3.9 or higher
