@@ -3,8 +3,9 @@ Embedding utilities for LifeUnity AI Cognitive Twin System.
 Provides text embedding functionality using Sentence-BERT.
 """
 
+import hashlib
 import numpy as np
-from typing import List, Union
+from typing import List, Union, Tuple
 from app.utils.logger import get_logger
 
 logger = get_logger("Embedder")
@@ -54,7 +55,6 @@ class TextEmbedder:
         Returns:
             Numpy array embedding
         """
-        import hashlib
         # Use SHA-256 hash of text to generate pseudo-random but deterministic embedding
         text_hash = hashlib.sha256(text.encode()).hexdigest()
         # Convert hex to numbers
@@ -67,7 +67,7 @@ class TextEmbedder:
         embedding = embedding / np.linalg.norm(embedding)
         return embedding.astype(np.float32)
     
-    def _normalize_text_input(self, text: Union[str, List[str]]) -> tuple[List[str], bool]:
+    def _normalize_text_input(self, text: Union[str, List[str]]) -> Tuple[List[str], bool]:
         """
         Normalize text input to always be a list and track if it was originally a single string.
         
