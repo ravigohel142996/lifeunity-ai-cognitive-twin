@@ -13,14 +13,11 @@ from datetime import datetime, timedelta
 import pandas as pd
 
 # Import modules
-import sys, os
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
-from mood_detection import get_mood_detector
-from memory_graph import get_memory_graph
-from user_profile import get_user_profile
-from insights_engine import get_insights_engine
-from utils.logger import get_logger
+from app.mood_detection import get_mood_detector
+from app.memory_graph import get_memory_graph
+from app.user_profile import get_user_profile
+from app.insights_engine import get_insights_engine
+from app.utils.logger import get_logger
 
 # Initialize logger
 logger = get_logger("MainApp")
