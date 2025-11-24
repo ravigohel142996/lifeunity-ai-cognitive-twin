@@ -16,7 +16,7 @@ That's it! The main file path is simply `main.py` (located in the root directory
 
 ### 1. Fork or Push Repository to GitHub
 - Ensure your code is pushed to GitHub
-- Repository: `ravigohel142996/lifeunity-ai-cognitive-twin`
+- Repository: `ravigohel142996/lifeunity-ai-cognitive-twin` (or `your-username/lifeunity-ai-cognitive-twin` if you forked it)
 
 ### 2. Go to Streamlit Cloud
 - Visit [Streamlit Cloud](https://share.streamlit.io/)
@@ -27,7 +27,7 @@ Click "New app" or "Deploy an app" and enter the following:
 
 | Field | Value |
 |-------|-------|
-| **Repository** | `ravigohel142996/lifeunity-ai-cognitive-twin` |
+| **Repository** | `ravigohel142996/lifeunity-ai-cognitive-twin` (or `your-username/lifeunity-ai-cognitive-twin` if forked) |
 | **Branch** | `main` |
 | **Main file path** | `main.py` |
 | **App URL (optional)** | `lifeunity-ai-cognitive-twin` (or your preferred name) |

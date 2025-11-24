@@ -156,6 +156,7 @@ def main():
         print("✓ ALL CHECKS PASSED")
         print("\nFor Streamlit Cloud deployment:")
         print("  Repository: ravigohel142996/lifeunity-ai-cognitive-twin")
+        print("              (or your-username/lifeunity-ai-cognitive-twin if forked)")
         print("  Branch: main")
         print("  Main file path: main.py")
         print("\nSee STREAMLIT_CLOUD_DEPLOYMENT.md for detailed instructions.")
