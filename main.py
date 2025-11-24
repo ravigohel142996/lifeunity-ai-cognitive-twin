@@ -190,6 +190,10 @@ def render_emotion_detection():
             with st.spinner("Analyzing emotion..."):
                 result = detector.detect_emotion(image_np, return_all=True)
             
+            # Show demo mode notification if applicable
+            if result.get('demo_mode'):
+                ui.info_box("ℹ️ Running in demo mode. Install DeepFace for real emotion detection.", box_type="info")
+            
             if result['face_detected']:
                 emotion = result['emotion']
                 confidence = result['confidence']
