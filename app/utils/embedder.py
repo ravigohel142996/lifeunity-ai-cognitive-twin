@@ -52,13 +52,14 @@ class TextEmbedder:
             Numpy array embedding
         """
         import hashlib
-        # Use hash of text to generate pseudo-random but deterministic embedding
-        text_hash = hashlib.md5(text.encode()).hexdigest()
+        # Use SHA-256 hash of text to generate pseudo-random but deterministic embedding
+        text_hash = hashlib.sha256(text.encode()).hexdigest()
         # Convert hex to numbers
-        seed = int(text_hash[:8], 16)
-        np.random.seed(seed)
+        seed = int(text_hash[:16], 16)
+        # Use local random generator for thread safety
+        rng = np.random.default_rng(seed)
         # Generate random embedding
-        embedding = np.random.randn(self.embedding_dim)
+        embedding = rng.standard_normal(self.embedding_dim)
         # Normalize
         embedding = embedding / np.linalg.norm(embedding)
         return embedding.astype(np.float32)

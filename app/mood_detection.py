@@ -6,6 +6,7 @@ Emotion detection using DeepFace (Streamlit Cloud compatible).
 import numpy as np
 from PIL import Image
 import tempfile
+import random
 from app.utils.logger import get_logger
 
 logger = get_logger("MoodDetection")
@@ -41,7 +42,6 @@ class MoodDetector:
         
         # If DeepFace is not available, return demo emotion
         if not self.deepface_available:
-            import random
             demo_emotion = random.choice(self.emotion_labels)
             demo_confidence = random.uniform(0.5, 0.9)
             response = {
