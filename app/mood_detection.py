@@ -8,8 +8,8 @@ from typing import Dict
 
 try:
     from fer import FER
-except Exception:
-    raise ImportError("FER library could not be imported. Ensure it is in requirements.txt.")
+except ImportError as e:
+    raise ImportError(f"FER library could not be imported. Ensure it is in requirements.txt. Error: {str(e)}")
 
 from app.utils.logger import get_logger
 
