@@ -1,9 +1,7 @@
 services:
-  - type: web
-    name: lifeunity-ai-cognitive-twin
+  - name: lifeunity-ai-cognitive-twin
+    type: web
     env: python
-    region: oregon
-    plan: free
     buildCommand: "pip install -r requirements.txt"
-    startCommand: "streamlit run app/main.py --server.port 10000 --server.address 0.0.0.0"
-    autoDeploy: true
+    startCommand: "streamlit run main.py --server.port=$PORT --server.address=0.0.0.0"
+    plan: free

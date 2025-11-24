@@ -5,8 +5,13 @@ Emotion detection using facial expression recognition via image upload.
 
 import numpy as np
 from typing import Dict
-from fer import FER
-from .utils.logger import get_logger
+
+try:
+    from fer import FER
+except ImportError as e:
+    raise ImportError(f"FER library could not be imported. Ensure it is in requirements.txt. Error: {str(e)}")
+
+from app.utils.logger import get_logger
 
 logger = get_logger("MoodDetection")
 

@@ -7,7 +7,7 @@ from sentence_transformers import SentenceTransformer
 import numpy as np
 from typing import List, Union
 import torch
-from .logger import get_logger
+from app.utils.logger import get_logger
 
 logger = get_logger("Embedder")
 
