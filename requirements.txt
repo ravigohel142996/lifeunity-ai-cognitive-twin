@@ -1,8 +1,8 @@
 streamlit>=1.28.0
+moviepy==1.0.3
 fer==22.5.1
 tensorflow>=2.13.0
 tf-keras>=2.20.0
-moviepy<2.0
 opencv-contrib-python>=4.8.0
 sentence-transformers>=2.2.0
 torch>=2.0.0
