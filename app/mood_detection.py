@@ -6,7 +6,6 @@ Emotion detection using DeepFace (Streamlit Cloud compatible).
 import numpy as np
 from PIL import Image
 import tempfile
-import random
 from app.utils.logger import get_logger
 
 logger = get_logger("MoodDetection")
@@ -42,18 +41,21 @@ class MoodDetector:
         
         # If DeepFace is not available, return demo emotion
         if not self.deepface_available:
-            demo_emotion = random.choice(self.emotion_labels)
-            demo_confidence = random.uniform(0.5, 0.9)
+            # Use thread-safe random generation
+            rng = np.random.default_rng()
+            demo_emotion_idx = rng.integers(0, len(self.emotion_labels))
+            demo_emotion = self.emotion_labels[demo_emotion_idx]
+            demo_confidence = rng.uniform(0.5, 0.9)
             response = {
                 "emotion": demo_emotion,
-                "confidence": demo_confidence,
+                "confidence": float(demo_confidence),
                 "face_detected": True,
                 "demo_mode": True,
                 "message": "DeepFace not available. Using demo mode."
             }
             if return_all:
-                # Generate mock emotions
-                all_emotions = {emotion: random.uniform(0.0, 1.0) for emotion in self.emotion_labels}
+                # Generate mock emotions using thread-safe random
+                all_emotions = {emotion: float(rng.uniform(0.0, 1.0)) for emotion in self.emotion_labels}
                 # Normalize
                 total = sum(all_emotions.values())
                 all_emotions = {k: v/total for k, v in all_emotions.items()}
