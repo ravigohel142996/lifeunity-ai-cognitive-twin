@@ -116,7 +116,7 @@ class TextEmbedder:
             )
             
             logger.debug(f"Generated embeddings for {len(text)} texts")
-            return embeddings
+            return embeddings[0] if is_single else embeddings
             
         except Exception as e:
             logger.error(f"Error generating embeddings: {str(e)}", exc_info=True)
@@ -169,14 +169,14 @@ class TextEmbedder:
         """
         try:
             # Embed query and candidates
-            query_embedding = self.embed_text(query)
-            candidate_embeddings = self.embed_text(candidates)
+            query_embedding = self.embed_text(query)  # Returns single embedding for single string
+            candidate_embeddings = self.embed_text(candidates)  # Returns array of embeddings
             
             # Compute similarities
             similarities = []
             for idx, candidate_emb in enumerate(candidate_embeddings):
-                similarity = np.dot(query_embedding[0], candidate_emb) / (
-                    np.linalg.norm(query_embedding[0]) * np.linalg.norm(candidate_emb)
+                similarity = np.dot(query_embedding, candidate_emb) / (
+                    np.linalg.norm(query_embedding) * np.linalg.norm(candidate_emb)
                 )
                 similarities.append((idx, candidates[idx], float(similarity)))
             
