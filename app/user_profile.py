@@ -8,7 +8,7 @@ import os
 from datetime import datetime
 from typing import Dict, List, Optional
 from pathlib import Path
-from utils.logger import get_logger
+from app.utils.logger import get_logger
 
 logger = get_logger("UserProfile")
 
