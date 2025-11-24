@@ -5,6 +5,10 @@
 [![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org)
 
+> **📌 Quick Answer for Streamlit Cloud Deployment:**  
+> **Main file path:** `main.py`  
+> See [STREAMLIT_CLOUD_DEPLOYMENT.md](STREAMLIT_CLOUD_DEPLOYMENT.md) for complete instructions.
+
 An advanced AI-powered cognitive twin system that tracks your emotional state, builds a personalized memory graph, and provides proactive well-being insights. **Optimized for Render.com deployment.**
 
 ## 🌟 Features
