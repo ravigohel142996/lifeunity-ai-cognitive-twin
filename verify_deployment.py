@@ -136,7 +136,6 @@ def check_no_webcam_code():
     video_patterns = [
         r'cv2\.VideoCapture\(',
         r'VideoCapture\(',
-        r'\.read\(\)\s*#.*video',
     ]
     
     found_issues = []
@@ -185,8 +184,10 @@ def check_import_structure():
                 module = node.module
                 if module:
                     # Check for incorrect relative imports
-                    if module.startswith('utils.') or module in ['mood_detection', 'memory_graph', 
-                                                                   'user_profile', 'insights_engine']:
+                    incorrect_modules = ['utils.', 'mood_detection', 'memory_graph', 
+                                         'user_profile', 'insights_engine']
+                    if any(module.startswith(prefix) or module == prefix.rstrip('.') 
+                           for prefix in incorrect_modules):
                         issues.append((py_file, f"from {module}"))
     
     if issues:

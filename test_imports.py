@@ -26,9 +26,9 @@ def check_imports_in_file(filepath):
             module = node.module
             if module:
                 # Check for relative imports without app prefix
-                if module.startswith('utils.') or module.startswith('mood_detection') or \
-                   module.startswith('memory_graph') or module.startswith('user_profile') or \
-                   module.startswith('insights_engine'):
+                incorrect_modules = ['utils.', 'mood_detection', 'memory_graph', 
+                                     'user_profile', 'insights_engine']
+                if any(module.startswith(prefix) for prefix in incorrect_modules):
                     if not module.startswith('app.'):
                         issues.append(f"Relative import: from {module}")
     
