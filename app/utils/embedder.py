@@ -23,6 +23,9 @@ except ImportError as e:
 class TextEmbedder:
     """Text embedding handler using Sentence-BERT or simple fallback."""
     
+    # Default embedding dimension for fallback mode
+    DEFAULT_EMBEDDING_DIM = 384
+    
     def __init__(self, model_name: str = 'all-MiniLM-L6-v2'):
         """
         Initialize the text embedder.
@@ -35,7 +38,7 @@ class TextEmbedder:
         self.embedding_dim = None
         self.use_simple_embeddings = not SENTENCE_TRANSFORMERS_AVAILABLE
         if self.use_simple_embeddings:
-            self.embedding_dim = 384  # Match standard model size
+            self.embedding_dim = self.DEFAULT_EMBEDDING_DIM
             logger.info("Using simple hash-based embeddings (fallback mode)")
         else:
             logger.info(f"Initializing TextEmbedder with model: {model_name}")
@@ -64,6 +67,33 @@ class TextEmbedder:
         embedding = embedding / np.linalg.norm(embedding)
         return embedding.astype(np.float32)
     
+    def _normalize_text_input(self, text: Union[str, List[str]]) -> tuple[List[str], bool]:
+        """
+        Normalize text input to always be a list and track if it was originally a single string.
+        
+        Args:
+            text: Single text string or list of text strings
+            
+        Returns:
+            Tuple of (text_list, is_single_input)
+        """
+        is_single = isinstance(text, str)
+        text_list = [text] if is_single else text
+        return text_list, is_single
+    
+    def _format_embeddings_output(self, embeddings: np.ndarray, is_single: bool) -> np.ndarray:
+        """
+        Format embeddings output based on whether input was single or multiple texts.
+        
+        Args:
+            embeddings: Array of embeddings
+            is_single: Whether the original input was a single text
+            
+        Returns:
+            Single embedding array if is_single, otherwise array of embeddings
+        """
+        return embeddings[0] if is_single else embeddings
+    
     def load_model(self):
         """Load the sentence transformer model."""
         if self.use_simple_embeddings:
@@ -81,7 +111,7 @@ class TextEmbedder:
             logger.error(f"Error loading model: {str(e)}", exc_info=True)
             logger.warning("Falling back to simple embeddings")
             self.use_simple_embeddings = True
-            self.embedding_dim = 384
+            self.embedding_dim = self.DEFAULT_EMBEDDING_DIM
     
     def embed_text(self, text: Union[str, List[str]]) -> np.ndarray:
         """
@@ -91,18 +121,16 @@ class TextEmbedder:
             text: Single text string or list of text strings
             
         Returns:
-            Numpy array of embeddings
+            Numpy array of embeddings (single array for single text, 2D array for multiple texts)
         """
-        # Handle single string
-        is_single = isinstance(text, str)
-        if is_single:
-            text = [text]
+        # Normalize input
+        text_list, is_single = self._normalize_text_input(text)
         
         # Use simple embeddings if sentence-transformers not available
         if self.use_simple_embeddings:
-            embeddings = np.array([self._simple_hash_embedding(t) for t in text])
-            logger.debug(f"Generated simple embeddings for {len(text)} texts")
-            return embeddings[0] if is_single else embeddings
+            embeddings = np.array([self._simple_hash_embedding(t) for t in text_list])
+            logger.debug(f"Generated simple embeddings for {len(text_list)} texts")
+            return self._format_embeddings_output(embeddings, is_single)
         
         # Load model if not loaded
         if self.model is None:
@@ -111,20 +139,20 @@ class TextEmbedder:
         try:
             # Generate embeddings using sentence-transformers
             embeddings = self.model.encode(
-                text,
+                text_list,
                 convert_to_numpy=True,
                 show_progress_bar=False
             )
             
-            logger.debug(f"Generated embeddings for {len(text)} texts")
-            return embeddings[0] if is_single else embeddings
+            logger.debug(f"Generated embeddings for {len(text_list)} texts")
+            return self._format_embeddings_output(embeddings, is_single)
             
         except Exception as e:
             logger.error(f"Error generating embeddings: {str(e)}", exc_info=True)
             # Fallback to simple embeddings
             logger.warning("Falling back to simple embeddings")
-            embeddings = np.array([self._simple_hash_embedding(t) for t in text])
-            return embeddings[0] if is_single else embeddings
+            embeddings = np.array([self._simple_hash_embedding(t) for t in text_list])
+            return self._format_embeddings_output(embeddings, is_single)
     
     def compute_similarity(self, text1: str, text2: str) -> float:
         """
