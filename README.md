@@ -79,7 +79,7 @@ This application is optimized for **Render.com** deployment:
    - Connect your GitHub repository
 3. **Render will automatically detect render.yaml**
    - Build Command: `pip install -r requirements.txt`
-   - Start Command: `streamlit run app/main.py --server.port $PORT --server.address 0.0.0.0`
+   - Start Command: `streamlit run main.py --server.port $PORT --server.address 0.0.0.0`
 4. **Click "Create Web Service"**
 5. **Your app will be deployed** - first deployment takes 5-10 minutes
 6. **Access your Render URL** and start using the app immediately
@@ -97,7 +97,7 @@ The repository includes:
 - `render.yaml` - Render service configuration
 - `requirements.txt` - All production dependencies
 - `.gitignore` - Proper exclusions for cloud deployment
-- `app/main.py` - Streamlit application entry point
+- `main.py` - Streamlit application entry point
 - `Dockerfile` - Optional Docker configuration
 - `run.sh` - Helper startup script
 
@@ -122,7 +122,7 @@ pip install -r requirements.txt
 
 3. **Run the application**
 ```bash
-streamlit run app/main.py
+streamlit run main.py
 ```
 
 The application will open in your default web browser at `http://localhost:8501`
@@ -164,8 +164,10 @@ docker run -p 8501:8501 lifeunity-ai
 3. **Create a new app**
    - Repository: `your-username/lifeunity-ai-cognitive-twin`
    - Branch: `main`
-   - Main file path: `app/main.py`
+   - Main file path: `main.py`
 4. **Click "Deploy"**
+
+**Note:** For detailed Streamlit Cloud deployment instructions, see [STREAMLIT_CLOUD_DEPLOYMENT.md](STREAMLIT_CLOUD_DEPLOYMENT.md)
 
 ## 📖 Usage Guide
 

@@ -62,7 +62,7 @@ services:
     region: oregon
     plan: free
     buildCommand: "pip install -r requirements.txt"
-    startCommand: "streamlit run app/main.py --server.port 10000 --server.address 0.0.0.0"
+    startCommand: "streamlit run main.py --server.port 10000 --server.address 0.0.0.0"
     autoDeploy: true
 ```
 
@@ -81,7 +81,7 @@ services:
    - **Name**: `lifeunity-ai-cognitive-twin`
    - **Environment**: `Python 3`
    - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `streamlit run app/main.py --server.port 10000 --server.address 0.0.0.0`
+   - **Start Command**: `streamlit run main.py --server.port 10000 --server.address 0.0.0.0`
    - **Plan**: Free
 
 3. **Deploy**
@@ -169,7 +169,7 @@ To run the application locally:
 pip install -r requirements.txt
 
 # Run Streamlit app
-streamlit run app/main.py --server.port 8501
+streamlit run main.py --server.port 8501
 ```
 
 The application will be available at `http://localhost:8501`
@@ -208,7 +208,7 @@ No environment variables are required for basic deployment. All data is stored l
    - Changed imports from `from utils.X` to `from app.utils.X`
    - Changed imports from `from module` to `from app.module`
 
-3. **app/main.py**
+3. **main.py**
    - Removed: `sys.path.append(os.path.dirname(os.path.abspath(__file__)))`
    - Updated: All imports to use `app.*` prefix
 

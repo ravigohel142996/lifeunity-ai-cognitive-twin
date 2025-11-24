@@ -83,7 +83,7 @@ Feature requests are welcome! Please include:
 
 4. **Run the application**
    ```bash
-   streamlit run app/main.py
+   streamlit run main.py
    ```
 
 ## Code Style
