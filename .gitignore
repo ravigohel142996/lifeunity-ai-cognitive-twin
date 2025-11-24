@@ -53,3 +53,10 @@ models/
 tmp/
 temp/
 *.tmp
+
+# Test and validation scripts
+test_import_structure.py
+test_imports.py
+test_modules.py
+validate_deployment.py
+verify_deployment.py
