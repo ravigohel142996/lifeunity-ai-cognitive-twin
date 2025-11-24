@@ -6,10 +6,18 @@ Emotion detection using DeepFace (Streamlit Cloud compatible).
 import numpy as np
 from PIL import Image
 import tempfile
-from deepface import DeepFace
 from app.utils.logger import get_logger
 
 logger = get_logger("MoodDetection")
+
+# Try to import DeepFace, but handle gracefully if not available
+try:
+    from deepface import DeepFace
+    DEEPFACE_AVAILABLE = True
+    logger.info("DeepFace loaded successfully")
+except ImportError as e:
+    DEEPFACE_AVAILABLE = False
+    logger.warning(f"DeepFace not available: {e}. Emotion detection will use mock data.")
 
 
 class MoodDetector:
@@ -19,12 +27,39 @@ class MoodDetector:
         self.emotion_labels = [
             'angry', 'disgust', 'fear', 'happy', 'sad', 'surprise', 'neutral'
         ]
-        logger.info("MoodDetector initialized using DeepFace")
+        self.deepface_available = DEEPFACE_AVAILABLE
+        if self.deepface_available:
+            logger.info("MoodDetector initialized using DeepFace")
+        else:
+            logger.warning("MoodDetector initialized in demo mode (DeepFace not available)")
 
     def detect_emotion(self, image: np.ndarray, return_all=False):
         """
         Detect emotion using DeepFace.
+        If DeepFace is not available, returns demo data.
         """
+        
+        # If DeepFace is not available, return demo emotion
+        if not self.deepface_available:
+            import random
+            demo_emotion = random.choice(self.emotion_labels)
+            demo_confidence = random.uniform(0.5, 0.9)
+            response = {
+                "emotion": demo_emotion,
+                "confidence": demo_confidence,
+                "face_detected": True,
+                "demo_mode": True,
+                "message": "DeepFace not available. Using demo mode."
+            }
+            if return_all:
+                # Generate mock emotions
+                all_emotions = {emotion: random.uniform(0.0, 1.0) for emotion in self.emotion_labels}
+                # Normalize
+                total = sum(all_emotions.values())
+                all_emotions = {k: v/total for k, v in all_emotions.items()}
+                response["all_emotions"] = all_emotions
+            logger.info(f"Demo mode: Returning {demo_emotion} with confidence {demo_confidence:.2f}")
+            return response
 
         try:
             pil_img = Image.fromarray(image)
