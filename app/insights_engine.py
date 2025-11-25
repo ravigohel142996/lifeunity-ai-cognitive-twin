@@ -7,11 +7,6 @@ from typing import Dict, List, Optional
 from datetime import datetime, timedelta
 import random
 import streamlit as st
-import sys
-import os
-
-# Add parent directory to path for imports
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from app.utils.logger import get_logger
 from app.user_profile import get_user_profile

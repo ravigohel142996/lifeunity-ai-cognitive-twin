@@ -3,14 +3,10 @@ Embedding utilities for LifeUnity AI Cognitive Twin System.
 Provides text embedding functionality using Sentence-BERT or TfidfVectorizer fallback.
 """
 
+import hashlib
 import numpy as np
 from typing import List, Union, Tuple
 import streamlit as st
-import sys
-import os
-
-# Add parent directory to path for imports
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from app.utils.logger import get_logger
 
@@ -244,8 +240,6 @@ class TextEmbedder:
         Returns:
             Embedding vector
         """
-        import hashlib
-        
         # Use hash for deterministic pseudo-random embedding
         text_hash = hashlib.sha256(text.encode()).hexdigest()
         seed = int(text_hash[:16], 16)

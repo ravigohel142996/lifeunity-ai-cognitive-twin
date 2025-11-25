@@ -10,11 +10,6 @@ from datetime import datetime
 from pathlib import Path
 import networkx as nx
 import streamlit as st
-import sys
-import os
-
-# Add parent directory to path for imports
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from app.utils.embedder import get_embedder
 from app.utils.logger import get_logger

@@ -6,11 +6,6 @@ Emotion detection using HuggingFace transformers (lightweight, CPU-friendly).
 import numpy as np
 from PIL import Image
 import streamlit as st
-import sys
-import os
-
-# Add parent directory to path for imports
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from app.utils.logger import get_logger
 
@@ -18,6 +13,11 @@ logger = get_logger("MoodDetection")
 
 # Flag for availability - always True with fallback
 DEEPFACE_AVAILABLE = True  # Kept for backward compatibility
+
+# Model configuration - can be overridden via environment variables
+import os
+EMOTION_MODEL_PRIMARY = os.environ.get("EMOTION_MODEL_PRIMARY", "trpakov/vit-face-expression")
+EMOTION_MODEL_FALLBACK = os.environ.get("EMOTION_MODEL_FALLBACK", "dima806/facial_emotions_image_detection")
 
 # Try to import transformers for emotion detection
 _TRANSFORMERS_AVAILABLE = False
@@ -77,13 +77,13 @@ class EmotionModel:
         
         try:
             # Use a lightweight emotion classification model
-            # This model is specifically trained for facial emotion recognition
+            # Model can be configured via environment variables
             emotion_pipeline = pipeline(
                 "image-classification",
-                model="trpakov/vit-face-expression",
+                model=EMOTION_MODEL_PRIMARY,
                 device=-1  # Force CPU
             )
-            logger.info("Emotion detection pipeline loaded successfully")
+            logger.info(f"Emotion detection pipeline loaded: {EMOTION_MODEL_PRIMARY}")
             return emotion_pipeline
         except Exception as e:
             logger.info(f"Could not load primary model: {e}")
@@ -91,10 +91,10 @@ class EmotionModel:
                 # Fallback to another lightweight model
                 emotion_pipeline = pipeline(
                     "image-classification",
-                    model="dima806/facial_emotions_image_detection",
+                    model=EMOTION_MODEL_FALLBACK,
                     device=-1
                 )
-                logger.info("Fallback emotion pipeline loaded")
+                logger.info(f"Fallback emotion pipeline loaded: {EMOTION_MODEL_FALLBACK}")
                 return emotion_pipeline
             except Exception as e2:
                 logger.info(f"Could not load fallback model: {e2}")
