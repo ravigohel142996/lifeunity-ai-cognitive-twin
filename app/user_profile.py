@@ -10,7 +10,7 @@ from typing import Dict, List, Optional
 from pathlib import Path
 import streamlit as st
 
-from app.utils.logger import get_logger
+from utils.logger import get_logger
 
 logger = get_logger("UserProfile")
 

@@ -17,7 +17,7 @@ import streamlit as st
 os.environ.setdefault('USE_TORCH', '1')
 os.environ.setdefault('TRANSFORMERS_NO_TF', '1')
 
-from app.utils.logger import get_logger
+from utils.logger import get_logger
 
 logger = get_logger("Embedder")
 

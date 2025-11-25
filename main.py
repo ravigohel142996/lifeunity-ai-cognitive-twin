@@ -11,14 +11,17 @@ from datetime import datetime
 import sys
 import os
 
-# Ensure app directory is in path for imports
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# Ensure app directory is in path for direct imports
+app_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app')
+if app_dir not in sys.path:
+    sys.path.insert(0, app_dir)
 
-from app.mood_detection import get_mood_detector
-from app.memory_graph import get_memory_graph
-from app.user_profile import get_user_profile
-from app.insights_engine import get_insights_engine
-from app import ui
+# Direct imports from app directory (Streamlit Cloud compatible)
+from mood_detection import get_mood_detector
+from memory_graph import get_memory_graph
+from user_profile import get_user_profile
+from insights_engine import get_insights_engine
+import ui
 
 # Page configuration
 st.set_page_config(
@@ -30,6 +33,9 @@ st.set_page_config(
 
 # Load custom CSS
 ui.load_global_css()
+
+# Constants
+INITIAL_ASSISTANT_MESSAGE = "Hello! 👋 I'm your LifeUnity AI Cognitive Twin. Ask me anything about your emotional well-being, productivity, stress management, or how to use this app. How can I help you today?"
 
 # Initialize session state for backend instances
 if 'user_profile' not in st.session_state:
@@ -625,8 +631,336 @@ def render_insights():
     ui.footer()
 
 
+def generate_ai_response(user_message: str) -> str:
+    """
+    Generate AI response based on user message and context.
+    Uses memory graph and user profile for personalized responses.
+    """
+    user_message_lower = user_message.lower()
+    
+    # Get user context
+    profile_summary = st.session_state.user_profile.get_summary()
+    memory_graph = st.session_state.memory_graph
+    
+    # Context-aware responses
+    if any(word in user_message_lower for word in ['stress', 'stressed', 'anxious', 'anxiety']):
+        stress_level = profile_summary['current_stress_level']
+        if stress_level > 70:
+            return f"I notice your stress level is currently at {stress_level:.0f}/100, which is elevated. Here are some suggestions:\n\n🧘 **Deep breathing**: Try 4-7-8 breathing - inhale for 4 seconds, hold for 7, exhale for 8.\n\n🚶 **Take a break**: A short walk can help reduce stress hormones.\n\n💭 **Journal your thoughts**: Writing down what's bothering you can provide clarity."
+        elif stress_level > 40:
+            return f"Your stress level is at {stress_level:.0f}/100, which is moderate. To keep it in check:\n\n☕ **Stay hydrated** and avoid excessive caffeine.\n\n🎵 **Listen to calming music** or nature sounds.\n\n⏰ **Prioritize tasks** - focus on what's most important first."
+        else:
+            return f"Great news! Your stress level is at {stress_level:.0f}/100, which is well-managed. Keep up the good work! 🌟\n\n💡 **Tip**: Continue your current wellness practices and track your emotions regularly."
+    
+    elif any(word in user_message_lower for word in ['productivity', 'productive', 'focus', 'work']):
+        productivity = profile_summary['current_productivity']
+        if productivity >= 70:
+            return f"Excellent! Your productivity score is {productivity:.0f}/100. You're in a great zone! 🚀\n\n**Maximize this state by:**\n• Tackling your most challenging tasks now\n• Using the Pomodoro technique (25 min work, 5 min break)\n• Staying hydrated and energized"
+        else:
+            return f"Your productivity is at {productivity:.0f}/100. Let's boost it! 💪\n\n**Try these strategies:**\n• Break large tasks into smaller, manageable chunks\n• Eliminate distractions (phone on silent, close unnecessary tabs)\n• Set specific goals for the next hour\n• Take short breaks to recharge"
+    
+    elif any(word in user_message_lower for word in ['mood', 'feeling', 'emotion', 'happy', 'sad']):
+        return "I can help you understand your emotions better! 😊\n\n**Here's how I can assist:**\n• Go to **Mood Detection** to analyze your current emotional state from a photo\n• Check **AI Insights** for patterns in your emotional well-being\n• Track emotions over time to identify triggers and trends\n\nHow are you feeling right now? I'm here to listen! 💜"
+    
+    elif any(word in user_message_lower for word in ['memory', 'memories', 'remember', 'note']):
+        stats = memory_graph.get_graph_stats()
+        return f"Your cognitive memory graph currently has **{stats['total_memories']} memories** with **{stats['total_connections']} connections**! 🧩\n\n**Tips for better memory management:**\n• Add notes regularly to build your knowledge graph\n• Use tags to organize memories by topic\n• Search memories to find related thoughts and ideas\n\nWant to add a new memory? Head to the **Cognitive Memory** page!"
+    
+    elif any(word in user_message_lower for word in ['hello', 'hi', 'hey', 'greetings']):
+        return "Hello! 👋 Welcome to LifeUnity AI - your Cognitive Twin!\n\n**I can help you with:**\n🧠 Understanding your emotions and mood patterns\n📊 Tracking and improving your productivity\n💡 Getting personalized AI insights\n🧩 Building your cognitive memory graph\n\nWhat would you like to explore today?"
+    
+    elif any(word in user_message_lower for word in ['help', 'what can you do', 'features']):
+        return "I'm your AI-powered Cognitive Twin! Here's what I can do: 🌟\n\n**🏠 Dashboard** - View your overall wellness metrics\n\n**😊 Mood Detection** - Analyze emotions from photos using AI\n\n**🧩 Cognitive Memory** - Build a knowledge graph of your thoughts\n\n**💡 AI Insights** - Get personalized recommendations\n\n**💬 Chat** - Talk to me anytime for guidance!\n\nJust ask me anything about stress, productivity, emotions, or well-being!"
+    
+    elif any(word in user_message_lower for word in ['thank', 'thanks', 'appreciate']):
+        return "You're welcome! 😊 I'm always here to help you on your wellness journey.\n\nRemember: Taking care of your mental health is a strength, not a weakness. Keep tracking, keep growing! 💜\n\nIs there anything else I can help you with?"
+    
+    else:
+        # Default intelligent response
+        return f"Thanks for your message! 🤖\n\nI'm your Cognitive Twin assistant, designed to help with:\n\n• **Emotional wellness** - Track and understand your moods\n• **Productivity** - Optimize your work patterns\n• **Memory** - Build your personal knowledge graph\n• **Insights** - Get AI-powered recommendations\n\n**Quick stats:**\n• Stress Level: {profile_summary['current_stress_level']:.0f}/100\n• Productivity: {profile_summary['current_productivity']:.0f}/100\n\nTry asking about stress management, productivity tips, or how to track your emotions!"
+
+
+def render_ask_me_anything():
+    """Render the Ask Me Anything chatbot page with world-class UI."""
+    ui.page_transition()
+    
+    ui.hero_section(
+        title="Ask Me Anything",
+        subtitle="Your AI Cognitive Twin is ready to assist you with personalized guidance",
+        emoji="🤖"
+    )
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Initialize chat history
+    if 'chat_messages' not in st.session_state:
+        st.session_state.chat_messages = [
+            {"role": "assistant", "content": INITIAL_ASSISTANT_MESSAGE}
+        ]
+    
+    # Instructions
+    ui.info_box(
+        "💬 <strong>Chat with your AI Twin:</strong> Ask questions about stress management, productivity tips, emotional well-being, or any features of the app. I provide personalized responses based on your profile data.",
+        box_type="info"
+    )
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Chat container with messages
+    chat_container = st.container()
+    
+    with chat_container:
+        for message in st.session_state.chat_messages:
+            if message["role"] == "user":
+                st.markdown(f"""
+                <div style="display: flex; justify-content: flex-end; margin: 1rem 0;">
+                    <div style="background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%); 
+                                color: white; padding: 1rem 1.5rem; border-radius: 20px 20px 5px 20px; 
+                                max-width: 80%; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);">
+                        {message["content"]}
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+            else:
+                st.markdown(f"""
+                <div style="display: flex; justify-content: flex-start; margin: 1rem 0;">
+                    <div style="background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(20px);
+                                color: #F1F5F9; padding: 1rem 1.5rem; border-radius: 20px 20px 20px 5px; 
+                                max-width: 80%; border: 1px solid rgba(99, 102, 241, 0.2);
+                                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            <span style="font-size: 1.2rem;">🤖</span>
+                            <span style="font-weight: 600; color: #8B5CF6;">LifeUnity AI</span>
+                        </div>
+                        <div style="line-height: 1.6; white-space: pre-line;">{message["content"]}</div>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Chat input with form for enter key support
+    with st.form(key="chat_form", clear_on_submit=True):
+        col1, col2 = st.columns([6, 1])
+        with col1:
+            user_input = st.text_input(
+                "Type your message:",
+                placeholder="Ask me anything...",
+                label_visibility="collapsed",
+                key="chat_input"
+            )
+        with col2:
+            submit_button = st.form_submit_button("Send 🚀", use_container_width=True)
+        
+        if submit_button and user_input:
+            # Add user message
+            st.session_state.chat_messages.append({"role": "user", "content": user_input})
+            
+            # Generate AI response
+            response = generate_ai_response(user_input)
+            st.session_state.chat_messages.append({"role": "assistant", "content": response})
+            
+            # Rerun to show new messages
+            st.rerun()
+    
+    def handle_quick_action(message: str, button_key: str, button_label: str) -> bool:
+        """Handle quick action button click."""
+        if st.button(button_label, use_container_width=True, key=button_key):
+            st.session_state.chat_messages.append({"role": "user", "content": message})
+            response = generate_ai_response(message)
+            st.session_state.chat_messages.append({"role": "assistant", "content": response})
+            st.rerun()
+        return False
+    
+    # Quick action buttons
+    st.markdown("<br>", unsafe_allow_html=True)
+    ui.gradient_text("⚡ Quick Questions", size="1.3rem")
+    
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        handle_quick_action("How can I manage my stress?", "quick_stress", "😰 Stress Tips")
+    
+    with col2:
+        handle_quick_action("How can I be more productive?", "quick_prod", "💪 Productivity")
+    
+    with col3:
+        handle_quick_action("How do I track my mood?", "quick_mood", "😊 Track Mood")
+    
+    with col4:
+        handle_quick_action("What can you help me with?", "quick_help", "❓ Help")
+    
+    # Clear chat button
+    st.markdown("<br>", unsafe_allow_html=True)
+    if st.button("🗑️ Clear Chat History", key="clear_chat"):
+        st.session_state.chat_messages = [
+            {"role": "assistant", "content": INITIAL_ASSISTANT_MESSAGE}
+        ]
+        st.rerun()
+    
+    ui.footer()
+
+
+def render_floating_chatbot():
+    """Render the floating chatbot bubble that's always visible."""
+    # Initialize floating chat state
+    if 'floating_chat_open' not in st.session_state:
+        st.session_state.floating_chat_open = False
+    if 'floating_chat_messages' not in st.session_state:
+        st.session_state.floating_chat_messages = [
+            {"role": "assistant", "content": "Hi! 👋 I'm your quick AI assistant. How can I help?"}
+        ]
+    
+    # Inject floating chatbot CSS and HTML
+    floating_css = """
+    <style>
+    /* Floating Chatbot Bubble */
+    .floating-chat-bubble {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5);
+        z-index: 9999;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        animation: chatPulse 2s ease-in-out infinite;
+    }
+    
+    .floating-chat-bubble:hover {
+        transform: scale(1.1);
+        box-shadow: 0 12px 40px rgba(99, 102, 241, 0.6);
+    }
+    
+    .floating-chat-bubble span {
+        font-size: 1.8rem;
+    }
+    
+    @keyframes chatPulse {
+        0%, 100% { box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5); }
+        50% { box-shadow: 0 8px 40px rgba(99, 102, 241, 0.7); }
+    }
+    
+    /* Floating Chat Window */
+    .floating-chat-window {
+        position: fixed;
+        bottom: 100px;
+        right: 30px;
+        width: 380px;
+        max-height: 500px;
+        background: rgba(15, 23, 42, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 24px;
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        z-index: 9998;
+        overflow: hidden;
+        animation: slideUp 0.3s ease;
+    }
+    
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .floating-chat-header {
+        background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+        padding: 1rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .floating-chat-header h4 {
+        margin: 0;
+        color: white;
+        font-weight: 700;
+        font-size: 1rem;
+    }
+    
+    .floating-chat-close {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: white;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 1.2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .floating-chat-body {
+        padding: 1rem;
+        max-height: 350px;
+        overflow-y: auto;
+    }
+    
+    .floating-chat-input-container {
+        padding: 1rem;
+        border-top: 1px solid rgba(99, 102, 241, 0.2);
+        display: flex;
+        gap: 0.5rem;
+    }
+    
+    .floating-chat-input {
+        flex: 1;
+        background: rgba(30, 41, 59, 0.8);
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        border-radius: 12px;
+        padding: 0.75rem 1rem;
+        color: #F1F5F9;
+        font-size: 0.9rem;
+    }
+    
+    .floating-chat-send {
+        background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+        border: none;
+        border-radius: 12px;
+        padding: 0.75rem 1rem;
+        color: white;
+        cursor: pointer;
+        font-weight: 600;
+    }
+    
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+        .floating-chat-window {
+            width: calc(100% - 40px);
+            right: 20px;
+            bottom: 90px;
+        }
+        
+        .floating-chat-bubble {
+            bottom: 20px;
+            right: 20px;
+            width: 55px;
+            height: 55px;
+        }
+    }
+    </style>
+    """
+    st.markdown(floating_css, unsafe_allow_html=True)
+
+
 def main():
     """Main application entry point with world-class UI navigation."""
+    
+    # Show startup badge once for missing dependencies (non-intrusive)
+    if 'startup_badge_shown' not in st.session_state:
+        st.session_state.startup_badge_shown = True
+        # Check dependencies silently - no warnings shown to user
+    
+    # Render floating chatbot (always visible)
+    render_floating_chatbot()
     
     # Sidebar with glassmorphism navigation
     with st.sidebar:
@@ -643,12 +977,12 @@ def main():
         
         ui.section_divider()
         
-        # Navigation with styled radio buttons
+        # Navigation with styled radio buttons - Added Ask Me Anything
         st.markdown("<p style='color: #94A3B8; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;'>📍 Navigation</p>", unsafe_allow_html=True)
         
         page = st.radio(
             "Navigate to:",
-            ["🏠 Dashboard", "😊 Mood Detection", "🧩 Cognitive Memory", "💡 AI Insights"],
+            ["🏠 Dashboard", "😊 Mood Detection", "🧩 Cognitive Memory", "💡 AI Insights", "💬 Ask Me Anything"],
             label_visibility="collapsed"
         )
         
@@ -682,12 +1016,13 @@ def main():
         </div>
         """, unsafe_allow_html=True)
         
-        # Version info at bottom
+        # Version info at bottom with updated credits
         st.markdown("<br><br>", unsafe_allow_html=True)
         st.markdown("""
         <div style="text-align: center; padding-top: 1rem; border-top: 1px solid rgba(99, 102, 241, 0.2);">
             <p style="color: #64748B; font-size: 0.75rem;">v2.0 - UI POWERPACK</p>
-            <p style="color: #64748B; font-size: 0.7rem;">© 2025 LifeUnity AI</p>
+            <p style="color: #8B5CF6; font-size: 0.7rem; font-weight: 500;">Built by Ravi Gohel</p>
+            <p style="color: #64748B; font-size: 0.65rem;">MU IDEA & Hack4Unity 2025</p>
         </div>
         """, unsafe_allow_html=True)
     
@@ -700,6 +1035,8 @@ def main():
         render_memory_graph()
     elif "AI Insights" in page:
         render_insights()
+    elif "Ask Me Anything" in page:
+        render_ask_me_anything()
 
 
 if __name__ == "__main__":

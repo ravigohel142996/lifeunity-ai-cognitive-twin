@@ -772,8 +772,11 @@ def footer():
         <p class="footer-text" style="color: #94A3B8; font-size: 0.95rem; margin-bottom: 1rem;">
             ✨ Powered by <strong style="background: linear-gradient(135deg, #6366F1, #8B5CF6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">LifeUnity AI</strong> - Cognitive Twin System
         </p>
-        <p class="footer-text" style="font-size: 0.85rem; margin-top: 0.5rem; color: #64748B;">
-            © 2025 LifeUnity AI | MU IDEA 2025 | Hack4Unity Winner
+        <p class="footer-text" style="font-size: 0.9rem; margin-top: 0.5rem; color: #8B5CF6; font-weight: 600;">
+            Built by Ravi Gohel • MU IDEA & Hack4Unity 2025
+        </p>
+        <p class="footer-text" style="font-size: 0.75rem; margin-top: 0.5rem; color: #64748B;">
+            © 2025 LifeUnity AI | All Rights Reserved
         </p>
         <div class="footer-links" style="display: flex; justify-content: center; gap: 2rem; margin-top: 1.5rem;">
             <a href="#" class="footer-link" title="GitHub" style="color: #94A3B8; text-decoration: none; font-size: 1.5rem; display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 12px; background: rgba(51, 65, 85, 0.5); border: 1px solid rgba(99, 102, 241, 0.2); transition: all 0.3s ease;">🐙</a>

@@ -8,9 +8,9 @@ from datetime import datetime, timedelta
 import random
 import streamlit as st
 
-from app.utils.logger import get_logger
-from app.user_profile import get_user_profile
-from app.memory_graph import get_memory_graph
+from utils.logger import get_logger
+from user_profile import get_user_profile
+from memory_graph import get_memory_graph
 
 logger = get_logger("InsightsEngine")
 
