@@ -4,9 +4,18 @@ Provides text embedding functionality using Sentence-BERT or TfidfVectorizer fal
 """
 
 import hashlib
+import os
 import numpy as np
 from typing import List, Union, Tuple
 import streamlit as st
+
+# Disable TensorFlow imports to prevent compatibility issues on Python 3.13.
+# These environment variables only affect the transformers/sentence-transformers
+# library behavior and do not impact other parts of the application.
+# - USE_TORCH: Forces transformers to use PyTorch instead of TensorFlow
+# - TRANSFORMERS_NO_TF: Disables TensorFlow-specific imports in transformers
+os.environ.setdefault('USE_TORCH', '1')
+os.environ.setdefault('TRANSFORMERS_NO_TF', '1')
 
 from app.utils.logger import get_logger
 
@@ -24,7 +33,10 @@ try:
     _SENTENCE_TRANSFORMERS_LOADED = True
     logger.info("Sentence-Transformers loaded successfully")
 except ImportError:
-    logger.info("Sentence-Transformers not available, using TF-IDF fallback")
+    logger.info("Sentence-Transformers not available (not installed), using TF-IDF fallback")
+except ValueError:
+    # ValueError: TensorFlow compatibility issues (e.g., on Python 3.13)
+    logger.info("Sentence-Transformers not available (TensorFlow compatibility error), using TF-IDF fallback")
 
 try:
     from sklearn.feature_extraction.text import TfidfVectorizer
