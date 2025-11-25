@@ -1030,11 +1030,11 @@ def render_daily_insight_card(title, content, icon="💡"):
     
     Args:
         title: Card title
-        content: Insight content
+        content: Insight content (should be pre-sanitized or contain trusted HTML)
         icon: Title icon
     """
-    # Escape any problematic characters for safe HTML rendering
-    safe_content = content.replace('"', '&quot;')
+    # For trusted internal content that may contain safe HTML tags like <strong>, <em>, <br>
+    # The content is generated internally and not from user input
     
     insight_html = f"""
     <div style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 24px; border: 1px solid rgba(99, 102, 241, 0.3); padding: 2rem; position: relative; overflow: hidden;">

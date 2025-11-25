@@ -52,7 +52,9 @@ def render_dashboard():
     profile = st.session_state.user_profile
     profile_summary = profile.get_summary()
     
-    if st.session_state.first_visit and profile_summary['total_emotions_tracked'] == 0:
+    # Show onboarding only for new users with no tracked emotions
+    # This provides a better first-time user experience
+    if profile_summary['total_emotions_tracked'] == 0 and st.session_state.first_visit:
         ui.render_onboarding_message()
         st.session_state.first_visit = False
     
@@ -142,9 +144,20 @@ def render_dashboard():
     with col2:
         ui.gradient_text("💡 Daily AI Insight", size="1.5rem")
         
-        # Generate a simple daily insight
-        stress_status = "Low" if profile_summary['current_stress_level'] < 40 else "Moderate" if profile_summary['current_stress_level'] < 70 else "High"
-        insight_content = f"Your current stress level is <strong>{stress_status}</strong> ({profile_summary['current_stress_level']:.0f}%). Productivity score is at <strong>{profile_summary['current_productivity']:.0f}%</strong>.<br><br>💡 <em>Tip: Regular emotion tracking helps improve self-awareness and well-being.</em>"
+        # Generate a simple daily insight with clear stress level categorization
+        stress_level = profile_summary['current_stress_level']
+        if stress_level < 40:
+            stress_status = "Low"
+        elif stress_level < 70:
+            stress_status = "Moderate"
+        else:
+            stress_status = "High"
+        
+        insight_content = (
+            f"Your current stress level is <strong>{stress_status}</strong> ({stress_level:.0f}%). "
+            f"Productivity score is at <strong>{profile_summary['current_productivity']:.0f}%</strong>."
+            f"<br><br>💡 <em>Tip: Regular emotion tracking helps improve self-awareness and well-being.</em>"
+        )
         ui.render_daily_insight_card("Today's Overview", insight_content, "🌟")
     
     st.markdown("<br>", unsafe_allow_html=True)
