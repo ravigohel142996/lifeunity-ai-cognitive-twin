@@ -765,24 +765,67 @@ def metric_card(label, value, delta=None, delta_color="normal"):
 def footer():
     """
     Glass footer with credits and social icons.
-    Smooth pulse animation effect.
+    Smooth pulse animation effect - Sticky footer.
     """
     footer_html = """
-    <div class="footer">
-        <p class="footer-text" style="color: #94A3B8; font-size: 0.95rem; margin-bottom: 1rem;">
-            ✨ Powered by <strong style="background: linear-gradient(135deg, #6366F1, #8B5CF6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">LifeUnity AI</strong> - Cognitive Twin System
-        </p>
-        <p class="footer-text" style="font-size: 0.9rem; margin-top: 0.5rem; color: #8B5CF6; font-weight: 600;">
-            Built by Ravi Gohel • MU IDEA & Hack4Unity 2025
-        </p>
-        <p class="footer-text" style="font-size: 0.75rem; margin-top: 0.5rem; color: #64748B;">
-            © 2025 LifeUnity AI | All Rights Reserved
-        </p>
-        <div class="footer-links" style="display: flex; justify-content: center; gap: 2rem; margin-top: 1.5rem;">
-            <a href="#" class="footer-link" title="GitHub" style="color: #94A3B8; text-decoration: none; font-size: 1.5rem; display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 12px; background: rgba(51, 65, 85, 0.5); border: 1px solid rgba(99, 102, 241, 0.2); transition: all 0.3s ease;">🐙</a>
-            <a href="#" class="footer-link" title="Twitter" style="color: #94A3B8; text-decoration: none; font-size: 1.5rem; display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 12px; background: rgba(51, 65, 85, 0.5); border: 1px solid rgba(99, 102, 241, 0.2); transition: all 0.3s ease;">🐦</a>
-            <a href="#" class="footer-link" title="LinkedIn" style="color: #94A3B8; text-decoration: none; font-size: 1.5rem; display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 12px; background: rgba(51, 65, 85, 0.5); border: 1px solid rgba(99, 102, 241, 0.2); transition: all 0.3s ease;">💼</a>
-            <a href="#" class="footer-link" title="Website" style="color: #94A3B8; text-decoration: none; font-size: 1.5rem; display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 12px; background: rgba(51, 65, 85, 0.5); border: 1px solid rgba(99, 102, 241, 0.2); transition: all 0.3s ease;">🌐</a>
+    <style>
+        .sticky-footer {
+            position: relative;
+            margin-top: 4rem;
+            padding-bottom: 2rem;
+        }
+        .sticky-footer .footer {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-radius: 24px 24px 0 0;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-bottom: none;
+            padding: 2.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .sticky-footer .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #6366F1, #8B5CF6, #EC4899, #6366F1);
+            background-size: 300% 100%;
+            animation: gradientMove 3s linear infinite;
+        }
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 300% 50%; }
+        }
+    </style>
+    <div class="sticky-footer">
+        <div class="footer">
+            <div style="margin-bottom: 1.5rem;">
+                <span style="font-size: 2.5rem; filter: drop-shadow(0 4px 15px rgba(99, 102, 241, 0.5));">🧠</span>
+            </div>
+            <p class="footer-text" style="color: #94A3B8; font-size: 1rem; margin-bottom: 0.5rem;">
+                ✨ Powered by <strong style="background: linear-gradient(135deg, #6366F1, #8B5CF6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">LifeUnity AI</strong> - Cognitive Twin System
+            </p>
+            <hr style="border: none; height: 1px; background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.3), transparent); margin: 1.5rem 0;">
+            <p class="footer-text" style="font-size: 1.1rem; color: #F1F5F9; font-weight: 700; margin-bottom: 0.5rem;">
+                Built by Ravi Gohel • Hack4Unity 2025
+            </p>
+            <p class="footer-text" style="font-size: 0.9rem; color: #8B5CF6; margin-bottom: 1rem;">
+                Empowering humanity with AI-based cognitive wellness.
+            </p>
+            <p class="footer-text" style="font-size: 0.75rem; color: #64748B;">
+                © 2025 LifeUnity AI | All Rights Reserved
+            </p>
+            <div class="footer-links" style="display: flex; justify-content: center; gap: 1.5rem; margin-top: 1.5rem;">
+                <a href="#" class="footer-link" title="GitHub" style="color: #94A3B8; text-decoration: none; font-size: 1.3rem; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; background: rgba(51, 65, 85, 0.5); border: 1px solid rgba(99, 102, 241, 0.2); transition: all 0.3s ease;">🐙</a>
+                <a href="#" class="footer-link" title="Twitter" style="color: #94A3B8; text-decoration: none; font-size: 1.3rem; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; background: rgba(51, 65, 85, 0.5); border: 1px solid rgba(99, 102, 241, 0.2); transition: all 0.3s ease;">🐦</a>
+                <a href="#" class="footer-link" title="LinkedIn" style="color: #94A3B8; text-decoration: none; font-size: 1.3rem; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; background: rgba(51, 65, 85, 0.5); border: 1px solid rgba(99, 102, 241, 0.2); transition: all 0.3s ease;">💼</a>
+                <a href="#" class="footer-link" title="Website" style="color: #94A3B8; text-decoration: none; font-size: 1.3rem; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; background: rgba(51, 65, 85, 0.5); border: 1px solid rgba(99, 102, 241, 0.2); transition: all 0.3s ease;">🌐</a>
+            </div>
         </div>
     </div>
     """
