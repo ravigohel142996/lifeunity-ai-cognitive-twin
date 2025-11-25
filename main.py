@@ -192,30 +192,57 @@ def render_dashboard():
             message="Start tracking your emotions to see your activity here!"
         )
     
-    # Why This Dashboard Matters section
+    # Why This Dashboard Matters section - Story-driven with benefits
     st.markdown("<br>", unsafe_allow_html=True)
     ui.section_divider()
+    ui.gradient_text("🔹 Why This Dashboard Matters", size="1.8rem")
     
-    with st.expander("❗ Why LifeUnity AI Dashboard Matters"):
+    # Story-driven benefits using columns for better Streamlit compatibility
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
         st.markdown("""
-    The LifeUnity AI Cognitive Twin Dashboard helps you understand:
-
-    ### 🌟 Emotional State
-    Track happiness, stress, fatigue, and balance.
-
-    ### 🧠 Memory Intelligence
-    A graph-based memory engine builds your cognitive profile.
-
-    ### 🔮 Daily Insight Engine
-    Personalized behavioral insights and life optimization.
-
-    ### 🚀 Future Vision: LifeUnity AI Brain 2.0
-    - Predictive mood forecasting  
-    - Habit embeddings  
-    - Adaptive personality AI  
-    - Memory-aware smart conversations  
-
-    Your Cognitive Twin evolves with you.
+        <div style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%); backdrop-filter: blur(20px); border-radius: 20px; border: 1px solid rgba(99, 102, 241, 0.2); padding: 1.5rem; position: relative; overflow: hidden; height: 100%;">
+            <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #10B981, #34D399);"></div>
+            <div style="font-size: 2.5rem; margin-bottom: 1rem;">🧠</div>
+            <h3 style="color: #F1F5F9; font-weight: 700; margin-bottom: 0.75rem; font-size: 1.1rem;">Understand Your Emotional State</h3>
+            <p style="color: #94A3B8; line-height: 1.6; margin: 0; font-size: 0.9rem;">Track happiness, stress, fatigue, and emotional balance. AI-powered analysis helps identify patterns in your mental well-being.</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("""
+        <div style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%); backdrop-filter: blur(20px); border-radius: 20px; border: 1px solid rgba(99, 102, 241, 0.2); padding: 1.5rem; position: relative; overflow: hidden; height: 100%;">
+            <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #6366F1, #8B5CF6);"></div>
+            <div style="font-size: 2.5rem; margin-bottom: 1rem;">💡</div>
+            <h3 style="color: #F1F5F9; font-weight: 700; margin-bottom: 0.75rem; font-size: 1.1rem;">Mental Wellbeing Guidance</h3>
+            <p style="color: #94A3B8; line-height: 1.6; margin: 0; font-size: 0.9rem;">Receive personalized recommendations for stress management, productivity optimization, and cognitive wellness.</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col3:
+        st.markdown("""
+        <div style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%); backdrop-filter: blur(20px); border-radius: 20px; border: 1px solid rgba(99, 102, 241, 0.2); padding: 1.5rem; position: relative; overflow: hidden; height: 100%;">
+            <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #EC4899, #F472B6);"></div>
+            <div style="font-size: 2.5rem; margin-bottom: 1rem;">🤖</div>
+            <h3 style="color: #F1F5F9; font-weight: 700; margin-bottom: 0.75rem; font-size: 1.1rem;">Your Personal Cognitive Twin</h3>
+            <p style="color: #94A3B8; line-height: 1.6; margin: 0; font-size: 0.9rem;">An AI that learns and evolves with you, monitoring cognitive patterns and providing automation for better decisions.</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Additional expandable details
+    with st.expander("🚀 Future Vision: LifeUnity AI Brain 2.0"):
+        st.markdown("""
+        **Coming Soon:**
+        - 🔮 Predictive mood forecasting with machine learning
+        - 🧬 Habit embeddings for behavioral optimization
+        - 🎭 Adaptive personality AI that grows with you
+        - 💬 Memory-aware smart conversations
+        - 📊 Advanced analytics and trend visualization
+        
+        *Your Cognitive Twin evolves with you, becoming smarter and more personalized over time.*
         """)
     
     # Footer
@@ -660,8 +687,36 @@ def render_insights():
 def generate_ai_response(user_message: str) -> str:
     """
     Generate AI response based on user message and context.
-    Uses memory graph and user profile for personalized responses.
+    Uses the centralized chat engine for consistent responses.
     """
+    try:
+        from app.utils.chatbot import ask_ai
+    except ImportError:
+        try:
+            from utils.chatbot import ask_ai
+        except ImportError:
+            # Fallback to inline response
+            return _fallback_response(user_message)
+    
+    # Get user context for personalized responses
+    context = {}
+    try:
+        profile_summary = st.session_state.user_profile.get_summary()
+        context['stress_level'] = profile_summary['current_stress_level']
+        context['productivity'] = profile_summary['current_productivity']
+        context['total_emotions'] = profile_summary['total_emotions_tracked']
+        
+        memory_stats = st.session_state.memory_graph.get_graph_stats()
+        context['total_memories'] = memory_stats['total_memories']
+        context['total_connections'] = memory_stats['total_connections']
+    except Exception:
+        pass
+    
+    return ask_ai(user_message, context)
+
+
+def _fallback_response(user_message: str) -> str:
+    """Fallback response generator when chat engine is unavailable."""
     user_message_lower = user_message.lower()
     
     # Get user context
@@ -1048,8 +1103,9 @@ def main():
         st.markdown("""
         <div style="text-align: center; padding-top: 1rem; border-top: 1px solid rgba(99, 102, 241, 0.2);">
             <p style="color: #64748B; font-size: 0.75rem;">v2.0 - UI POWERPACK</p>
-            <p style="color: #8B5CF6; font-size: 0.7rem; font-weight: 500;">Built by Ravi Gohel</p>
-            <p style="color: #64748B; font-size: 0.65rem;">MU IDEA & Hack4Unity 2025</p>
+            <p style="color: #F1F5F9; font-size: 0.8rem; font-weight: 600;">Built by Ravi Gohel</p>
+            <p style="color: #8B5CF6; font-size: 0.7rem; font-weight: 500;">Hack4Unity 2025</p>
+            <p style="color: #64748B; font-size: 0.6rem; margin-top: 0.25rem;">Empowering AI Wellness</p>
         </div>
         """, unsafe_allow_html=True)
     
