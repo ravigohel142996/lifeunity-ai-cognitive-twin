@@ -1103,9 +1103,8 @@ def main():
         st.markdown("""
         <div style="text-align: center; padding-top: 1rem; border-top: 1px solid rgba(99, 102, 241, 0.2);">
             <p style="color: #64748B; font-size: 0.75rem;">v2.0 - UI POWERPACK</p>
-            <p style="color: #F1F5F9; font-size: 0.8rem; font-weight: 600;">Built by Ravi Gohel</p>
-            <p style="color: #8B5CF6; font-size: 0.7rem; font-weight: 500;">Hack4Unity 2025</p>
-            <p style="color: #64748B; font-size: 0.6rem; margin-top: 0.25rem;">Empowering AI Wellness</p>
+            <p style="color: #F1F5F9; font-size: 0.8rem; font-weight: 600;">Built by Ravi Gohel • Hack4Unity 2025</p>
+            <p style="color: #8B5CF6; font-size: 0.65rem; margin-top: 0.25rem;">Empowering humanity with AI-based cognitive wellness</p>
         </div>
         """, unsafe_allow_html=True)
     
