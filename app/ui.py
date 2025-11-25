@@ -1,7 +1,5 @@
 """
 LifeUnity AI - Cognitive Twin Dashboard
-UI POWERPACK - World-Class Professional UI Components
-Studio-Grade Design System with Glassmorphism
 """
 
 import streamlit as st
@@ -821,10 +819,10 @@ def footer():
                 © 2025 LifeUnity AI | All Rights Reserved
             </p>
             <div class="footer-links" style="display: flex; justify-content: center; gap: 1.5rem; margin-top: 1.5rem;">
-                <a href="#" class="footer-link" title="GitHub" style="color: #94A3B8; text-decoration: none; font-size: 1.3rem; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; background: rgba(51, 65, 85, 0.5); border: 1px solid rgba(99, 102, 241, 0.2); transition: all 0.3s ease;">🐙</a>
-                <a href="#" class="footer-link" title="Twitter" style="color: #94A3B8; text-decoration: none; font-size: 1.3rem; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; background: rgba(51, 65, 85, 0.5); border: 1px solid rgba(99, 102, 241, 0.2); transition: all 0.3s ease;">🐦</a>
-                <a href="#" class="footer-link" title="LinkedIn" style="color: #94A3B8; text-decoration: none; font-size: 1.3rem; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; background: rgba(51, 65, 85, 0.5); border: 1px solid rgba(99, 102, 241, 0.2); transition: all 0.3s ease;">💼</a>
-                <a href="#" class="footer-link" title="Website" style="color: #94A3B8; text-decoration: none; font-size: 1.3rem; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; background: rgba(51, 65, 85, 0.5); border: 1px solid rgba(99, 102, 241, 0.2); transition: all 0.3s ease;">🌐</a>
+                <a href="https://github.com/GohelR" class="footer-link" title="GitHub" style="color: #94A3B8; text-decoration: none; font-size: 1.3rem; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; background: rgba(51, 65, 85, 0.5); border: 1px solid rgba(99, 102, 241, 0.2); transition: all 0.3s ease;">🐙</a>
+                <a href="https://portfolioravigohel.netlify.app/" class="footer-link" title="Portfolio" style="color: #94A3B8; text-decoration: none; font-size: 1.3rem; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; background: rgba(51, 65, 85, 0.5); border: 1px solid rgba(99, 102, 241, 0.2); transition: all 0.3s ease;">🐦</a>
+                <a href="https://www.linkedin.com/in/ravi-gohel-733172245/" class="footer-link" title="LinkedIn" style="color: #94A3B8; text-decoration: none; font-size: 1.3rem; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; background: rgba(51, 65, 85, 0.5); border: 1px solid rgba(99, 102, 241, 0.2); transition: all 0.3s ease;">💼</a>
+                <a href="https://github.com/ravigohel142996/lifeunity-ai-cognitive-twin" class="footer-link" title="This project code" style="color: #94A3B8; text-decoration: none; font-size: 1.3rem; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; background: rgba(51, 65, 85, 0.5); border: 1px solid rgba(99, 102, 241, 0.2); transition: all 0.3s ease;">🌐</a>
             </div>
         </div>
     </div>
