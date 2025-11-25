@@ -11,9 +11,9 @@ from pathlib import Path
 import networkx as nx
 import streamlit as st
 
-from app.utils.embedder import get_embedder
-from app.utils.logger import get_logger
-from app.utils.preprocess import clean_text
+from utils.embedder import get_embedder
+from utils.logger import get_logger
+from utils.preprocess import clean_text
 
 logger = get_logger("MemoryGraph")
 

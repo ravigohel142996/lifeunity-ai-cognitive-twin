@@ -7,7 +7,7 @@ import numpy as np
 from PIL import Image
 import streamlit as st
 
-from app.utils.logger import get_logger
+from utils.logger import get_logger
 
 logger = get_logger("MoodDetection")
 

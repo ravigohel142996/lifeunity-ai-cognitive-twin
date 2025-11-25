@@ -1,6 +1,7 @@
 """
 Logger utility for LifeUnity AI Cognitive Twin System.
 Provides centralized logging functionality with different log levels.
+Production-ready: Suppresses verbose warnings for missing optional dependencies.
 """
 
 import logging
@@ -31,6 +32,8 @@ class CognitiveTwinLogger:
         
         # Only configure if not already configured
         if not self.logger.handlers:
+            # Production mode: Only show WARNING and above to console
+            # This suppresses INFO messages about missing optional dependencies
             self.logger.setLevel(logging.DEBUG)
             
             # Create formatters
@@ -39,9 +42,9 @@ class CognitiveTwinLogger:
                 datefmt='%Y-%m-%d %H:%M:%S'
             )
             
-            # Console handler - only INFO and above to reduce noise
+            # Console handler - Only WARNING and above (hides "not available" info messages)
             console_handler = logging.StreamHandler()
-            console_handler.setLevel(logging.INFO)
+            console_handler.setLevel(logging.WARNING)
             console_handler.setFormatter(formatter)
             self.logger.addHandler(console_handler)
             
@@ -55,7 +58,7 @@ class CognitiveTwinLogger:
                 file_handler.setFormatter(formatter)
                 self.logger.addHandler(file_handler)
             except (OSError, PermissionError):
-                # File logging not available
+                # File logging not available - this is expected on Streamlit Cloud
                 pass
         
         CognitiveTwinLogger._loggers[name] = self.logger
