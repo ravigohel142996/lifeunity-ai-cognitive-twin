@@ -27,7 +27,13 @@ class MemoryGraph:
             data_dir: Directory to store memory data
         """
         self.data_dir = Path(data_dir)
-        self.data_dir.mkdir(exist_ok=True)
+        self._storage_available = False
+        try:
+            self.data_dir.mkdir(exist_ok=True)
+            self._storage_available = True
+        except (OSError, PermissionError):
+            # Storage not available (e.g., on Streamlit Cloud)
+            logger.warning("Data directory not writable. Memory persistence disabled.")
         
         self.memory_file = self.data_dir / "memory_graph.json"
         self.embedder = get_embedder()
@@ -40,6 +46,8 @@ class MemoryGraph:
     
     def _load_memories(self) -> List[Dict]:
         """Load memories from file."""
+        if not self._storage_available:
+            return []
         try:
             if self.memory_file.exists():
                 with open(self.memory_file, 'r') as f:
@@ -54,6 +62,9 @@ class MemoryGraph:
     
     def _save_memories(self):
         """Save memories to file."""
+        if not self._storage_available:
+            logger.debug("Storage not available, skipping memory save")
+            return
         try:
             with open(self.memory_file, 'w') as f:
                 json.dump(self.memories, f, indent=2)
