@@ -26,7 +26,13 @@ class UserProfile:
         """
         self.user_id = user_id
         self.data_dir = Path(data_dir)
-        self.data_dir.mkdir(exist_ok=True)
+        self._storage_available = False
+        try:
+            self.data_dir.mkdir(exist_ok=True)
+            self._storage_available = True
+        except (OSError, PermissionError):
+            # Storage not available (e.g., on Streamlit Cloud)
+            logger.warning("Data directory not writable. Profile persistence disabled.")
         
         self.profile_file = self.data_dir / f"{user_id}_profile.json"
         self.profile = self._load_profile()
@@ -35,6 +41,8 @@ class UserProfile:
     
     def _load_profile(self) -> Dict:
         """Load user profile from file."""
+        if not self._storage_available:
+            return self._create_default_profile()
         try:
             if self.profile_file.exists():
                 with open(self.profile_file, 'r') as f:
@@ -77,6 +85,9 @@ class UserProfile:
     
     def _save_profile(self, profile: Optional[Dict] = None):
         """Save user profile to file."""
+        if not self._storage_available:
+            logger.debug("Storage not available, skipping profile save")
+            return
         try:
             if profile is None:
                 profile = self.profile

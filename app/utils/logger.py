@@ -23,10 +23,6 @@ class CognitiveTwinLogger:
         self.logger = logging.getLogger(name)
         self.logger.setLevel(logging.DEBUG)
         
-        # Create logs directory if it doesn't exist
-        log_path = Path(log_dir)
-        log_path.mkdir(exist_ok=True)
-        
         # Create formatters
         formatter = logging.Formatter(
             '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -38,16 +34,24 @@ class CognitiveTwinLogger:
         console_handler.setLevel(logging.INFO)
         console_handler.setFormatter(formatter)
         
-        # File handler
-        log_file = log_path / f"{name}_{datetime.now().strftime('%Y%m%d')}.log"
-        file_handler = logging.FileHandler(log_file)
-        file_handler.setLevel(logging.DEBUG)
-        file_handler.setFormatter(formatter)
+        # Try to set up file handler (may fail on read-only filesystems like Streamlit Cloud)
+        file_handler = None
+        try:
+            log_path = Path(log_dir)
+            log_path.mkdir(exist_ok=True)
+            log_file = log_path / f"{name}_{datetime.now().strftime('%Y%m%d')}.log"
+            file_handler = logging.FileHandler(log_file)
+            file_handler.setLevel(logging.DEBUG)
+            file_handler.setFormatter(formatter)
+        except (OSError, PermissionError):
+            # File logging not available (e.g., on Streamlit Cloud)
+            pass
         
         # Add handlers if not already added
         if not self.logger.handlers:
             self.logger.addHandler(console_handler)
-            self.logger.addHandler(file_handler)
+            if file_handler:
+                self.logger.addHandler(file_handler)
     
     def debug(self, message: str):
         """Log debug message."""
