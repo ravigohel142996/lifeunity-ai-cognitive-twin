@@ -16,7 +16,7 @@ try:
     import torch
     SENTENCE_TRANSFORMERS_AVAILABLE = True
     logger.info("Sentence-Transformers loaded successfully")
-except ImportError as e:
+except (ImportError, ValueError) as e:
     SENTENCE_TRANSFORMERS_AVAILABLE = False
     logger.warning(f"Sentence-Transformers not available: {e}. Using simple fallback embeddings.")
 
