@@ -34,6 +34,9 @@ st.set_page_config(
 # Load custom CSS
 ui.load_global_css()
 
+# Constants
+INITIAL_ASSISTANT_MESSAGE = "Hello! 👋 I'm your LifeUnity AI Cognitive Twin. Ask me anything about your emotional well-being, productivity, stress management, or how to use this app. How can I help you today?"
+
 # Initialize session state for backend instances
 if 'user_profile' not in st.session_state:
     st.session_state.user_profile = get_user_profile()
@@ -692,7 +695,7 @@ def render_ask_me_anything():
     # Initialize chat history
     if 'chat_messages' not in st.session_state:
         st.session_state.chat_messages = [
-            {"role": "assistant", "content": "Hello! 👋 I'm your LifeUnity AI Cognitive Twin. Ask me anything about your emotional well-being, productivity, stress management, or how to use this app. How can I help you today?"}
+            {"role": "assistant", "content": INITIAL_ASSISTANT_MESSAGE}
         ]
     
     # Instructions
@@ -760,6 +763,15 @@ def render_ask_me_anything():
             # Rerun to show new messages
             st.rerun()
     
+    def handle_quick_action(message: str, button_key: str, button_label: str) -> bool:
+        """Handle quick action button click."""
+        if st.button(button_label, use_container_width=True, key=button_key):
+            st.session_state.chat_messages.append({"role": "user", "content": message})
+            response = generate_ai_response(message)
+            st.session_state.chat_messages.append({"role": "assistant", "content": response})
+            st.rerun()
+        return False
+    
     # Quick action buttons
     st.markdown("<br>", unsafe_allow_html=True)
     ui.gradient_text("⚡ Quick Questions", size="1.3rem")
@@ -767,38 +779,22 @@ def render_ask_me_anything():
     col1, col2, col3, col4 = st.columns(4)
     
     with col1:
-        if st.button("😰 Stress Tips", use_container_width=True, key="quick_stress"):
-            st.session_state.chat_messages.append({"role": "user", "content": "How can I manage my stress?"})
-            response = generate_ai_response("How can I manage my stress?")
-            st.session_state.chat_messages.append({"role": "assistant", "content": response})
-            st.rerun()
+        handle_quick_action("How can I manage my stress?", "quick_stress", "😰 Stress Tips")
     
     with col2:
-        if st.button("💪 Productivity", use_container_width=True, key="quick_prod"):
-            st.session_state.chat_messages.append({"role": "user", "content": "How can I be more productive?"})
-            response = generate_ai_response("How can I be more productive?")
-            st.session_state.chat_messages.append({"role": "assistant", "content": response})
-            st.rerun()
+        handle_quick_action("How can I be more productive?", "quick_prod", "💪 Productivity")
     
     with col3:
-        if st.button("😊 Track Mood", use_container_width=True, key="quick_mood"):
-            st.session_state.chat_messages.append({"role": "user", "content": "How do I track my mood?"})
-            response = generate_ai_response("How do I track my mood?")
-            st.session_state.chat_messages.append({"role": "assistant", "content": response})
-            st.rerun()
+        handle_quick_action("How do I track my mood?", "quick_mood", "😊 Track Mood")
     
     with col4:
-        if st.button("❓ Help", use_container_width=True, key="quick_help"):
-            st.session_state.chat_messages.append({"role": "user", "content": "What can you help me with?"})
-            response = generate_ai_response("What can you help me with?")
-            st.session_state.chat_messages.append({"role": "assistant", "content": response})
-            st.rerun()
+        handle_quick_action("What can you help me with?", "quick_help", "❓ Help")
     
     # Clear chat button
     st.markdown("<br>", unsafe_allow_html=True)
     if st.button("🗑️ Clear Chat History", key="clear_chat"):
         st.session_state.chat_messages = [
-            {"role": "assistant", "content": "Hello! 👋 I'm your LifeUnity AI Cognitive Twin. Ask me anything about your emotional well-being, productivity, stress management, or how to use this app. How can I help you today?"}
+            {"role": "assistant", "content": INITIAL_ASSISTANT_MESSAGE}
         ]
         st.rerun()
     
