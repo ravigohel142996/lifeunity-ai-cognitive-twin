@@ -7,8 +7,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "app"))
 
 """
 LifeUnity AI - Cognitive Twin System
-Main Streamlit Application with World-Class UI
-UI POWERPACK - Neon Indigo Theme with Glassmorphism
+Your AI-driven companion for mood analysis, memory intelligence, and proactive mental wellness.
 """
 
 import streamlit as st
@@ -25,7 +24,8 @@ import ui
 
 # Page configuration
 st.set_page_config(
-    page_title="LifeUnity – AI Cognitive Twin",
+    page_title="LifeUnity AI — Your Cognitive Twin",
+    subtitle="AI-powered emotional intelligence, cognitive memory mapping, and personalized wellness insights.",
     layout="wide",
     page_icon="🧠",
     initial_sidebar_state="expanded"
@@ -1102,7 +1102,6 @@ def main():
         st.markdown("<br><br>", unsafe_allow_html=True)
         st.markdown("""
         <div style="text-align: center; padding-top: 1rem; border-top: 1px solid rgba(99, 102, 241, 0.2);">
-            <p style="color: #64748B; font-size: 0.75rem;">v2.0 - UI POWERPACK</p>
             <p style="color: #F1F5F9; font-size: 0.8rem; font-weight: 600;">Built by Ravi Gohel • Hack4Unity 2025</p>
             <p style="color: #8B5CF6; font-size: 0.65rem; margin-top: 0.25rem;">Empowering humanity with AI-based cognitive wellness</p>
         </div>
