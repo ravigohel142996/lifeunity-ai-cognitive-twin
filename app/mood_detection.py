@@ -15,7 +15,7 @@ try:
     from deepface import DeepFace
     DEEPFACE_AVAILABLE = True
     logger.info("DeepFace loaded successfully")
-except ImportError as e:
+except (ImportError, ValueError) as e:
     DEEPFACE_AVAILABLE = False
     logger.warning(f"DeepFace not available: {e}. Emotion detection will use mock data.")
 
