@@ -1,8 +1,13 @@
 [theme]
-primaryColor = "#1f77b4"
-backgroundColor = "#ffffff"
-secondaryBackgroundColor = "#f0f2f6"
-textColor = "#262730"
+# Neon Indigo Primary - Modern futuristic theme
+primaryColor = "#6366F1"
+# Dark Futuristic Background
+backgroundColor = "#0F172A"
+# Soft Slate Secondary Background
+secondaryBackgroundColor = "#1E293B"
+# White Text
+textColor = "#F1F5F9"
+# Inter Font (Falls back to sans-serif)
 font = "sans serif"
 
 [server]
