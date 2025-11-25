@@ -4,15 +4,20 @@ Main Streamlit Application with World-Class UI
 """
 
 import streamlit as st
-from app.mood_detection import get_mood_detector, DEEPFACE_AVAILABLE
-from app.memory_graph import get_memory_graph
-from app.user_profile import get_user_profile
-from app.insights_engine import get_insights_engine
-from app.utils.embedder import SENTENCE_TRANSFORMERS_AVAILABLE
-from app import ui
 import numpy as np
 from PIL import Image
 from datetime import datetime
+import sys
+import os
+
+# Ensure app directory is in path for imports
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from app.mood_detection import get_mood_detector
+from app.memory_graph import get_memory_graph
+from app.user_profile import get_user_profile
+from app.insights_engine import get_insights_engine
+from app import ui
 
 # Page configuration
 st.set_page_config(
@@ -24,16 +29,6 @@ st.set_page_config(
 
 # Load custom CSS
 ui.load_global_css()
-
-# Check for missing dependencies and show warning
-missing_deps = []
-if not DEEPFACE_AVAILABLE:
-    missing_deps.append("DeepFace (emotion detection)")
-if not SENTENCE_TRANSFORMERS_AVAILABLE:
-    missing_deps.append("Sentence-Transformers (memory embeddings)")
-
-if missing_deps:
-    st.warning(f"⚠️ **Demo Mode**: Some ML libraries are not available ({', '.join(missing_deps)}). The app will use fallback implementations. To enable full functionality, ensure all dependencies from requirements.txt are installed.")
 
 # Initialize session state for backend instances
 if 'user_profile' not in st.session_state:
@@ -189,10 +184,6 @@ def render_emotion_detection():
             
             with st.spinner("Analyzing emotion..."):
                 result = detector.detect_emotion(image_np, return_all=True)
-            
-            # Show demo mode notification if applicable
-            if result.get('demo_mode'):
-                ui.info_box("ℹ️ Running in demo mode. Install DeepFace for real emotion detection.", box_type="info")
             
             if result['face_detected']:
                 emotion = result['emotion']

@@ -12,6 +12,8 @@ from pathlib import Path
 class CognitiveTwinLogger:
     """Custom logger for the Cognitive Twin system."""
     
+    _loggers = {}
+    
     def __init__(self, name: str = "CognitiveTwin", log_dir: str = "logs"):
         """
         Initialize the logger.
@@ -20,38 +22,43 @@ class CognitiveTwinLogger:
             name: Logger name
             log_dir: Directory to store log files
         """
+        # Reuse existing logger if already created
+        if name in CognitiveTwinLogger._loggers:
+            self.logger = CognitiveTwinLogger._loggers[name]
+            return
+        
         self.logger = logging.getLogger(name)
-        self.logger.setLevel(logging.DEBUG)
         
-        # Create formatters
-        formatter = logging.Formatter(
-            '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-            datefmt='%Y-%m-%d %H:%M:%S'
-        )
-        
-        # Console handler
-        console_handler = logging.StreamHandler()
-        console_handler.setLevel(logging.INFO)
-        console_handler.setFormatter(formatter)
-        
-        # Try to set up file handler (may fail on read-only filesystems like Streamlit Cloud)
-        file_handler = None
-        try:
-            log_path = Path(log_dir)
-            log_path.mkdir(exist_ok=True)
-            log_file = log_path / f"{name}_{datetime.now().strftime('%Y%m%d')}.log"
-            file_handler = logging.FileHandler(log_file)
-            file_handler.setLevel(logging.DEBUG)
-            file_handler.setFormatter(formatter)
-        except (OSError, PermissionError):
-            # File logging not available (e.g., on Streamlit Cloud)
-            pass
-        
-        # Add handlers if not already added
+        # Only configure if not already configured
         if not self.logger.handlers:
+            self.logger.setLevel(logging.DEBUG)
+            
+            # Create formatters
+            formatter = logging.Formatter(
+                '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                datefmt='%Y-%m-%d %H:%M:%S'
+            )
+            
+            # Console handler - only INFO and above to reduce noise
+            console_handler = logging.StreamHandler()
+            console_handler.setLevel(logging.INFO)
+            console_handler.setFormatter(formatter)
             self.logger.addHandler(console_handler)
-            if file_handler:
+            
+            # Try to set up file handler (may fail on read-only filesystems)
+            try:
+                log_path = Path(log_dir)
+                log_path.mkdir(exist_ok=True)
+                log_file = log_path / f"{name}_{datetime.now().strftime('%Y%m%d')}.log"
+                file_handler = logging.FileHandler(log_file)
+                file_handler.setLevel(logging.DEBUG)
+                file_handler.setFormatter(formatter)
                 self.logger.addHandler(file_handler)
+            except (OSError, PermissionError):
+                # File logging not available
+                pass
+        
+        CognitiveTwinLogger._loggers[name] = self.logger
     
     def debug(self, message: str):
         """Log debug message."""
@@ -72,10 +79,6 @@ class CognitiveTwinLogger:
     def critical(self, message: str, exc_info: bool = False):
         """Log critical message."""
         self.logger.critical(message, exc_info=exc_info)
-
-
-# Global logger instance
-logger = CognitiveTwinLogger()
 
 
 def get_logger(name: str = "CognitiveTwin") -> CognitiveTwinLogger:

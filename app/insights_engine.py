@@ -6,6 +6,13 @@ Generates proactive AI-powered insights and recommendations.
 from typing import Dict, List, Optional
 from datetime import datetime, timedelta
 import random
+import streamlit as st
+import sys
+import os
+
+# Add parent directory to path for imports
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from app.utils.logger import get_logger
 from app.user_profile import get_user_profile
 from app.memory_graph import get_memory_graph
@@ -408,14 +415,12 @@ class InsightsEngine:
 _insights_engine = None
 
 
+@st.cache_resource
 def get_insights_engine() -> InsightsEngine:
     """
-    Get or create a global insights engine instance.
+    Get or create a cached insights engine instance.
     
     Returns:
         InsightsEngine instance
     """
-    global _insights_engine
-    if _insights_engine is None:
-        _insights_engine = InsightsEngine()
-    return _insights_engine
+    return InsightsEngine()
