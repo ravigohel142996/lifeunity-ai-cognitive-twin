@@ -1,3 +1,10 @@
+import sys
+import os
+
+# Path setup for Streamlit Cloud compatibility (must be before any other imports)
+sys.path.append(os.path.dirname(__file__))
+sys.path.append(os.path.join(os.path.dirname(__file__), "app"))
+
 """
 LifeUnity AI - Cognitive Twin System
 Main Streamlit Application with World-Class UI
@@ -8,13 +15,6 @@ import streamlit as st
 import numpy as np
 from PIL import Image
 from datetime import datetime
-import sys
-import os
-
-# Ensure app directory is in path for direct imports
-app_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app')
-if app_dir not in sys.path:
-    sys.path.insert(0, app_dir)
 
 # Direct imports from app directory (Streamlit Cloud compatible)
 from mood_detection import get_mood_detector
@@ -191,6 +191,32 @@ def render_dashboard():
             title="No Activity Yet",
             message="Start tracking your emotions to see your activity here!"
         )
+    
+    # Why This Dashboard Matters section
+    st.markdown("<br>", unsafe_allow_html=True)
+    ui.section_divider()
+    
+    with st.expander("❗ Why LifeUnity AI Dashboard Matters"):
+        st.markdown("""
+    The LifeUnity AI Cognitive Twin Dashboard helps you understand:
+
+    ### 🌟 Emotional State
+    Track happiness, stress, fatigue, and balance.
+
+    ### 🧠 Memory Intelligence
+    A graph-based memory engine builds your cognitive profile.
+
+    ### 🔮 Daily Insight Engine
+    Personalized behavioral insights and life optimization.
+
+    ### 🚀 Future Vision: LifeUnity AI Brain 2.0
+    - Predictive mood forecasting  
+    - Habit embeddings  
+    - Adaptive personality AI  
+    - Memory-aware smart conversations  
+
+    Your Cognitive Twin evolves with you.
+        """)
     
     # Footer
     ui.footer()
@@ -959,8 +985,9 @@ def main():
         st.session_state.startup_badge_shown = True
         # Check dependencies silently - no warnings shown to user
     
-    # Render floating chatbot (always visible)
-    render_floating_chatbot()
+    # Render floating chatbot (always visible) - use new chatbot_component
+    from chatbot_component import load_chatbot
+    load_chatbot()
     
     # Sidebar with glassmorphism navigation
     with st.sidebar:
