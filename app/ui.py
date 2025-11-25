@@ -1167,3 +1167,45 @@ def render_status_indicator(status, text):
     </span>
     """
     st.markdown(indicator_html, unsafe_allow_html=True)
+# ---- FIX CLICKABLE LINKS (Glassmorphism z-index bug) ----
+st.markdown("""
+<style>
+/* Force footer links to become clickable above blur/glass layers */
+.footer-link {
+    position: relative !important;
+    z-index: 999999 !important;
+    pointer-events: auto !important;
+}
+
+/* Fix invisible overlay blocking clicks */
+.stApp {
+    position: relative;
+    z-index: 0;
+}
+.stApp > div {
+    position: relative;
+    z-index: 0;
+}
+
+/* Remove overlay from footer container */
+.sticky-footer, .footer {
+    overflow: visible !important;
+}
+
+/* Fix global overlay that Streamlit adds */
+.block-container {
+    position: relative !important;
+    z-index: 0 !important;
+}
+
+/* Fix emoji buttons from catching clicks */
+button, .stButton button {
+    z-index: 1000000 !important;
+}
+
+/* Fix ANY accidental invisible floating div */
+div[style*="position: absolute"] {
+    pointer-events: none !important;
+}
+</style>
+""", unsafe_allow_html=True)
