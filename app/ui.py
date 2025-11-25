@@ -1166,7 +1166,6 @@ def render_status_indicator(status, text):
         {text}
     </span>
     """
-    st.markdown(indicator_html, unsafe_allow_html=True)
 # ---- FIX CLICKABLE LINKS (Glassmorphism z-index bug) ----
 st.markdown("""
 <style>
