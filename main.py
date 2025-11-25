@@ -24,8 +24,7 @@ import ui
 
 # Page configuration
 st.set_page_config(
-    page_title="LifeUnity AI — Your Cognitive Twin",
-    subtitle="AI-powered emotional intelligence, cognitive memory mapping, and personalized wellness insights.",
+    page_title="LifeUnity AI — Your Cognitive Twin AI-powered emotional intelligence, cognitive memory mapping, and personalized wellness insights.",
     layout="wide",
     page_icon="🧠",
     initial_sidebar_state="expanded"
