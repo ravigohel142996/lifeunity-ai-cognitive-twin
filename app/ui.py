@@ -19,15 +19,221 @@ def load_global_css():
     if css_file.exists():
         with open(css_file) as f:
             st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
-    else:
-        # Fallback minimal CSS if file not found
-        st.markdown("""
-        <style>
-        .stApp {
-            background: linear-gradient(135deg, #1e1e2e 0%, #2a2a3e 50%, #1e1e2e 100%);
-        }
-        </style>
-        """, unsafe_allow_html=True)
+    
+    # Add enhanced inline CSS for better emotion cards and insights
+    st.markdown("""
+    <style>
+    /* Enhanced emotion card styling */
+    .emotion-card {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 2rem;
+        text-align: center;
+        margin: 1rem 0;
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .emotion-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+    }
+    
+    .emotion-emoji {
+        font-size: 5rem;
+        margin-bottom: 1rem;
+        filter: drop-shadow(0 4px 20px rgba(102, 126, 234, 0.5));
+        animation: bounce 2s ease-in-out infinite;
+    }
+    
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+    
+    .emotion-label {
+        font-size: 2rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 1rem;
+    }
+    
+    .confidence-bar-container {
+        width: 100%;
+        height: 12px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 6px;
+        overflow: hidden;
+        margin: 1rem 0;
+    }
+    
+    .confidence-bar {
+        height: 100%;
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        border-radius: 6px;
+        transition: width 1s ease-out;
+        box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+    }
+    
+    .confidence-text {
+        color: #b8c5d0;
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+    
+    /* AI Insights box with gradient background */
+    .insights-box {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 20px;
+        border: 1px solid rgba(102, 126, 234, 0.3);
+        padding: 2rem;
+        margin: 1rem 0;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .insights-box::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+    }
+    
+    .insights-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #ffffff;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .insights-content {
+        color: #b8c5d0;
+        line-height: 1.8;
+    }
+    
+    /* Memory graph placeholder */
+    .memory-placeholder {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 20px;
+        border: 2px dashed rgba(102, 126, 234, 0.3);
+        padding: 4rem 2rem;
+        text-align: center;
+        margin: 2rem 0;
+    }
+    
+    .memory-placeholder-icon {
+        font-size: 4rem;
+        opacity: 0.5;
+        margin-bottom: 1rem;
+    }
+    
+    /* Loading spinner animation */
+    .loading-spinner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem;
+    }
+    
+    .loading-dots {
+        display: flex;
+        gap: 8px;
+    }
+    
+    .loading-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        animation: loadingPulse 1.4s ease-in-out infinite;
+    }
+    
+    .loading-dot:nth-child(2) { animation-delay: 0.2s; }
+    .loading-dot:nth-child(3) { animation-delay: 0.4s; }
+    
+    @keyframes loadingPulse {
+        0%, 100% { transform: scale(0.6); opacity: 0.5; }
+        50% { transform: scale(1); opacity: 1; }
+    }
+    
+    /* Top navigation bar enhancement */
+    .top-nav {
+        background: linear-gradient(135deg, rgba(30, 30, 46, 0.95) 0%, rgba(42, 42, 62, 0.95) 100%);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 1rem 2rem;
+        margin-bottom: 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+    }
+    
+    .top-nav-brand {
+        font-size: 1.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .top-nav-links {
+        display: flex;
+        gap: 1rem;
+    }
+    
+    .top-nav-link {
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        color: #b8c5d0;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+    
+    .top-nav-link:hover {
+        background: rgba(102, 126, 234, 0.2);
+        color: #ffffff;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+
+def top_navigation():
+    """
+    Render a professional top navigation bar.
+    """
+    nav_html = """
+    <div class="top-nav">
+        <span class="top-nav-brand">🧠 LifeUnity AI</span>
+        <div class="top-nav-links">
+            <span class="top-nav-link">📊 Dashboard</span>
+            <span class="top-nav-link">😊 Emotions</span>
+            <span class="top-nav-link">🧩 Memory</span>
+            <span class="top-nav-link">💡 Insights</span>
+        </div>
+    </div>
+    """
+    st.markdown(nav_html, unsafe_allow_html=True)
 
 
 def navbar(active_page="Dashboard"):
@@ -55,6 +261,86 @@ def navbar(active_page="Dashboard"):
     nav_html += '</div>'
     
     st.markdown(nav_html, unsafe_allow_html=True)
+
+
+def emotion_card(emoji: str, emotion: str, confidence: float):
+    """
+    Display an enhanced emotion card with emoji and confidence bar.
+    
+    Args:
+        emoji: Emotion emoji
+        emotion: Detected emotion name
+        confidence: Confidence score (0-1)
+    """
+    confidence_pct = int(confidence * 100)
+    
+    card_html = f"""
+    <div class="emotion-card">
+        <div class="emotion-emoji">{emoji}</div>
+        <div class="emotion-label">{emotion.title()}</div>
+        <div class="confidence-bar-container">
+            <div class="confidence-bar" style="width: {confidence_pct}%;"></div>
+        </div>
+        <div class="confidence-text">Confidence: {confidence_pct}%</div>
+    </div>
+    """
+    
+    st.markdown(card_html, unsafe_allow_html=True)
+
+
+def insights_box(title: str, content: str, icon: str = "💡"):
+    """
+    Display an AI insights box with gradient background.
+    
+    Args:
+        title: Box title
+        content: Content text
+        icon: Title icon
+    """
+    box_html = f"""
+    <div class="insights-box">
+        <div class="insights-title">{icon} {title}</div>
+        <div class="insights-content">{content}</div>
+    </div>
+    """
+    
+    st.markdown(box_html, unsafe_allow_html=True)
+
+
+def memory_graph_placeholder():
+    """
+    Display a placeholder when memory graph is empty.
+    """
+    placeholder_html = """
+    <div class="memory-placeholder">
+        <div class="memory-placeholder-icon">🧩</div>
+        <h3 style="color: #b8c5d0; margin-bottom: 0.5rem;">No Memories Yet</h3>
+        <p style="color: #7a8a99;">Add your first memory above to start building your cognitive graph!</p>
+    </div>
+    """
+    
+    st.markdown(placeholder_html, unsafe_allow_html=True)
+
+
+def loading_dots(text: str = "Processing..."):
+    """
+    Display animated loading dots.
+    
+    Args:
+        text: Loading message
+    """
+    loading_html = f"""
+    <div class="loading-spinner">
+        <div class="loading-dots">
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+        </div>
+        <p style="color: #b8c5d0; margin-top: 1rem;">{text}</p>
+    </div>
+    """
+    
+    st.markdown(loading_html, unsafe_allow_html=True)
 
 
 def hero_section(title, subtitle, emoji="🧠"):

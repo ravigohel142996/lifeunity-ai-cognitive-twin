@@ -9,6 +9,8 @@ from typing import Dict, List, Optional, Tuple
 from datetime import datetime
 from pathlib import Path
 import networkx as nx
+import streamlit as st
+
 from app.utils.embedder import get_embedder
 from app.utils.logger import get_logger
 from app.utils.preprocess import clean_text
@@ -365,14 +367,12 @@ class MemoryGraph:
 _memory_graph = None
 
 
+@st.cache_resource
 def get_memory_graph() -> MemoryGraph:
     """
-    Get or create a global memory graph instance.
+    Get or create a cached memory graph instance.
     
     Returns:
         MemoryGraph instance
     """
-    global _memory_graph
-    if _memory_graph is None:
-        _memory_graph = MemoryGraph()
-    return _memory_graph
+    return MemoryGraph()

@@ -8,6 +8,8 @@ import os
 from datetime import datetime
 from typing import Dict, List, Optional
 from pathlib import Path
+import streamlit as st
+
 from app.utils.logger import get_logger
 
 logger = get_logger("UserProfile")
@@ -299,9 +301,10 @@ class UserProfile:
 _profile = None
 
 
+@st.cache_resource
 def get_user_profile(user_id: str = "default_user") -> UserProfile:
     """
-    Get or create a user profile instance.
+    Get or create a cached user profile instance.
     
     Args:
         user_id: User identifier
@@ -309,7 +312,4 @@ def get_user_profile(user_id: str = "default_user") -> UserProfile:
     Returns:
         UserProfile instance
     """
-    global _profile
-    if _profile is None or _profile.user_id != user_id:
-        _profile = UserProfile(user_id)
-    return _profile
+    return UserProfile(user_id)
